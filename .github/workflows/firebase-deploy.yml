@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - claude/google-docs-link-6sz4gi
   workflow_dispatch: {}
 
 jobs:
