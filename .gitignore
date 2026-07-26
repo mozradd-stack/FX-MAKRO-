@@ -1,0 +1,14 @@
+node_modules
+dist
+dist-ssr
+*.local
+*.log
+
+server/data/*.db
+server/data/*.db-shm
+server/data/*.db-wal
+
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
