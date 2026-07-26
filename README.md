@@ -19,26 +19,31 @@ Firebase: Firestore, Cloud Functions and Hosting (project `fx-makro-app`).
 
 ## Running locally
 
-Local dev talks to a **Firestore emulator**, never the real project:
+Local dev talks to a **Firestore emulator**, never the real project. Requires
+Node.js 20+ and a JDK (the emulator runs on Java) — Node from
+[nodejs.org](https://nodejs.org), a JDK e.g. via `brew install openjdk` (macOS)
+or `apt install default-jdk` (Linux).
 
 ```bash
-npm run install:all                                   # installs functions + client dependencies
-
-# terminal 1 — Firestore emulator
-npx firebase-tools emulators:start --only firestore --project fx-makro-app
-
-# terminal 2 — seed once, then run the API against the emulator
-cd functions
-FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 GCLOUD_PROJECT=fx-makro-app npm run seed
-FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 GCLOUD_PROJECT=fx-makro-app npm run dev   # http://localhost:4001
-
-# terminal 3 — frontend
-cd client
-npm run dev   # http://localhost:5173, proxies /api to localhost:4001
+npm run install:all   # installs root + functions + client dependencies
+npm run dev:local     # starts the Firestore emulator, seeds it, then runs API + frontend
 ```
 
-`npm run seed` is idempotent — it skips seeding if `central_banks` already has
-data (pass `--force` to overwrite).
+Then open **http://localhost:5173**. `Ctrl+C` stops everything. This is one
+script (`scripts/dev-local.sh`) that sequences: Firestore emulator (port 8080)
+→ seed (idempotent — skips if `central_banks` already has data; pass `--force`
+to `functions/src/seed.js` to overwrite) → API on port 4001 → Vite on port
+5173, which proxies `/api` to the API.
+
+If you'd rather run each piece by hand (e.g. to see individual logs), the
+three commands `scripts/dev-local.sh` wraps are:
+
+```bash
+npx firebase-tools emulators:start --only firestore --project fx-makro-app
+FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 GCLOUD_PROJECT=fx-makro-app npm run seed --prefix functions
+FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 GCLOUD_PROJECT=fx-makro-app npm run dev --prefix functions
+npm run dev --prefix client
+```
 
 ## Deploying
 
