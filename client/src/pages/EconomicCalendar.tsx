@@ -8,13 +8,13 @@ import { Countdown } from '@/components/calendar/Countdown';
 
 export function EconomicCalendar() {
   const [events, setEvents] = useState<EconomicEvent[]>([]);
-  const [drafts, setDrafts] = useState<Record<number, string>>({});
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   useEffect(() => {
     fetchEconomicEvents().then(setEvents);
   }, []);
 
-  async function commit(id: number) {
+  async function commit(id: string) {
     const value = drafts[id];
     if (value === undefined) return;
     const updated = await updateEconomicEvent(id, value);

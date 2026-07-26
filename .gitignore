@@ -4,9 +4,10 @@ dist-ssr
 *.local
 *.log
 
-server/data/*.db
-server/data/*.db-shm
-server/data/*.db-wal
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
 
 .DS_Store
 .vscode/*

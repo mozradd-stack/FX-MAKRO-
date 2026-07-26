@@ -20,7 +20,7 @@ export interface CentralBank {
 }
 
 export interface RateHistoryRow {
-  id: number;
+  id: string;
   currency: string;
   rate: number;
   effective_date: string;
@@ -28,7 +28,7 @@ export interface RateHistoryRow {
 }
 
 export interface PairSignal {
-  id: number;
+  id: string;
   pair: string;
   bias: Bias;
   score: number;
@@ -40,7 +40,7 @@ export interface PairSignal {
 }
 
 export interface EconomicEvent {
-  id: number;
+  id: string;
   date: string;
   bank: string;
   expected_decision: string;

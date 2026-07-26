@@ -1,5 +1,5 @@
-import { db } from './db.js';
-import { buildPairs, calculateScore, getBias, trendDirection } from './scoring.js';
+const { db, centralBanksCol, pairSignalsCol, economicEventsCol, rateHistoryCol } = require('./firestore');
+const { buildPairs, calculateScore, getBias, trendDirection } = require('./scoring');
 
 const centralBanks = [
   { id: 'fed', name: 'Federal Reserve', country: 'United States', currency: 'USD', current_rate: 5.25, last_change_date: '2025-09-18', last_change_amount: -0.5, next_meeting: '2026-09-17', forward_guidance: 'dovish', cpi: 2.9, unemployment: 4.1, gdp_growth: 2.1 },
@@ -23,8 +23,7 @@ function buildRateHistory(bank) {
     const d = new Date(today);
     d.setMonth(d.getMonth() - i);
     const effective_date = d.toISOString().slice(0, 10);
-    rows.push({ currency: bank.currency, rate: Math.round(rate * 100) / 100, effective_date, change_amount: i === 0 ? bank.last_change_amount : 0 });
-    // step backward: undo roughly a quarter-point every ~4 months, seeded by currency char code for variety
+    rows.push({ rate: Math.round(rate * 100) / 100, effective_date, change_amount: i === 0 ? bank.last_change_amount : 0 });
     const seed = (bank.currency.charCodeAt(0) + i) % 5;
     if (seed === 0 && i > 0) rate += 0.25;
   }
@@ -42,64 +41,59 @@ const economicEvents = [
   { date: '2026-10-17', bank: 'European Central Bank', expected_decision: 'Unverändert', importance: 'HIGH', affected_pairs: 'EUR/USD,EUR/GBP,EUR/AUD,EUR/NZD,EUR/CAD,EUR/CHF,EUR/JPY' },
 ];
 
-function seed() {
-  const insertBank = db.prepare(`
-    INSERT INTO central_banks (id, name, country, currency, current_rate, last_change_date, last_change_amount, next_meeting, forward_guidance, cpi, unemployment, gdp_growth, updated_at)
-    VALUES (@id, @name, @country, @currency, @current_rate, @last_change_date, @last_change_amount, @next_meeting, @forward_guidance, @cpi, @unemployment, @gdp_growth, datetime('now'))
-    ON CONFLICT(id) DO UPDATE SET
-      name=excluded.name, country=excluded.country, currency=excluded.currency, current_rate=excluded.current_rate,
-      last_change_date=excluded.last_change_date, last_change_amount=excluded.last_change_amount, next_meeting=excluded.next_meeting,
-      forward_guidance=excluded.forward_guidance, cpi=excluded.cpi, unemployment=excluded.unemployment, gdp_growth=excluded.gdp_growth,
-      updated_at=datetime('now')
-  `);
+async function seed() {
+  const existing = await centralBanksCol.limit(1).get();
+  if (!existing.empty && !process.argv.includes('--force')) {
+    console.log('central_banks already has data — skipping seed (pass --force to overwrite).');
+    return;
+  }
 
-  const insertHistory = db.prepare(`
-    INSERT INTO rate_history (currency, rate, effective_date, change_amount) VALUES (@currency, @rate, @effective_date, @change_amount)
-  `);
+  const batch = db.batch();
+  for (const bank of centralBanks) {
+    const { id, ...data } = bank;
+    batch.set(centralBanksCol.doc(id), { ...data, updated_at: new Date().toISOString() });
+  }
+  await batch.commit();
 
-  const insertEvent = db.prepare(`
-    INSERT INTO economic_events (date, bank, expected_decision, importance, affected_pairs) VALUES (@date, @bank, @expected_decision, @importance, @affected_pairs)
-  `);
-
-  const insertPair = db.prepare(`
-    INSERT INTO pair_signals (pair, bias, score, differential, trend_direction, expected_change, notes, updated_at)
-    VALUES (@pair, @bias, @score, @differential, @trend_direction, @expected_change, @notes, datetime('now'))
-    ON CONFLICT(pair) DO UPDATE SET
-      bias=excluded.bias, score=excluded.score, differential=excluded.differential, trend_direction=excluded.trend_direction, updated_at=datetime('now')
-  `);
-
-  const clearHistory = db.prepare(`DELETE FROM rate_history WHERE currency = ?`);
-  const clearEvents = db.prepare(`DELETE FROM economic_events`);
-
-  const run = db.transaction(() => {
-    for (const bank of centralBanks) {
-      insertBank.run(bank);
-      clearHistory.run(bank.currency);
-      for (const row of buildRateHistory(bank)) insertHistory.run(row);
+  for (const bank of centralBanks) {
+    const historyBatch = db.batch();
+    const existingHistory = await rateHistoryCol(bank.id).get();
+    existingHistory.forEach((doc) => historyBatch.delete(doc.ref));
+    for (const row of buildRateHistory(bank)) {
+      historyBatch.set(rateHistoryCol(bank.id).doc(), { currency: bank.currency, ...row });
     }
+    await historyBatch.commit();
+  }
 
-    clearEvents.run();
-    for (const ev of economicEvents) insertEvent.run(ev);
+  const existingEvents = await economicEventsCol.get();
+  const eventsBatch = db.batch();
+  existingEvents.forEach((doc) => eventsBatch.delete(doc.ref));
+  for (const ev of economicEvents) eventsBatch.set(economicEventsCol.doc(), ev);
+  await eventsBatch.commit();
 
-    const banksByCurrency = Object.fromEntries(centralBanks.map((b) => [b.currency, b]));
-    for (const [a, b] of buildPairs()) {
-      const bankA = banksByCurrency[a];
-      const bankB = banksByCurrency[b];
-      const differential = Math.round((bankA.current_rate - bankB.current_rate) * 100) / 100;
-      insertPair.run({
-        pair: `${a}/${b}`,
-        bias: getBias(bankA, bankB),
-        score: calculateScore(bankA, bankB),
-        differential,
-        trend_direction: trendDirection(bankA, bankB, differential),
-        expected_change: '',
-        notes: '',
-      });
-    }
-  });
+  const banksByCurrency = Object.fromEntries(centralBanks.map((b) => [b.currency, b]));
+  const pairsBatch = db.batch();
+  for (const [a, b] of buildPairs()) {
+    const bankA = banksByCurrency[a];
+    const bankB = banksByCurrency[b];
+    const differential = Math.round((bankA.current_rate - bankB.current_rate) * 100) / 100;
+    pairsBatch.set(pairSignalsCol.doc(`${a}-${b}`), {
+      pair: `${a}/${b}`,
+      bias: getBias(bankA, bankB),
+      score: calculateScore(bankA, bankB),
+      differential,
+      trend_direction: trendDirection(bankA, bankB, differential),
+      expected_change: '',
+      notes: '',
+      updated_at: new Date().toISOString(),
+    });
+  }
+  await pairsBatch.commit();
 
-  run();
   console.log(`Seeded ${centralBanks.length} central banks, ${buildPairs().length} pairs, ${economicEvents.length} events.`);
 }
 
-seed();
+seed().then(() => process.exit(0)).catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

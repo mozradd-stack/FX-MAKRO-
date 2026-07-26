@@ -1,0 +1,20 @@
+{
+  "name": "fx-macro-functions",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "dev": "node dev-server.js",
+    "seed": "node src/seed.js",
+    "deploy": "firebase deploy --only functions,hosting"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.3.1"
+  }
+}

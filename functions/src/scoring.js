@@ -1,8 +1,8 @@
 // Currency hierarchy used to build the 28 canonical FX pairs (base/quote order
 // follows standard market convention: EUR > GBP > AUD > NZD > USD > CAD > CHF > JPY)
-export const CURRENCY_HIERARCHY = ['EUR', 'GBP', 'AUD', 'NZD', 'USD', 'CAD', 'CHF', 'JPY'];
+const CURRENCY_HIERARCHY = ['EUR', 'GBP', 'AUD', 'NZD', 'USD', 'CAD', 'CHF', 'JPY'];
 
-export function buildPairs() {
+function buildPairs() {
   const pairs = [];
   for (let i = 0; i < CURRENCY_HIERARCHY.length; i++) {
     for (let j = i + 1; j < CURRENCY_HIERARCHY.length; j++) {
@@ -18,14 +18,14 @@ function guidanceValue(g) {
   return 0;
 }
 
-export function trendDirection(bankA, bankB, diff) {
+function trendDirection(bankA, bankB, diff) {
   const trendDelta = bankA.last_change_amount - bankB.last_change_amount;
   if (trendDelta === 0) return 'stable';
   const widening = diff >= 0 ? trendDelta > 0 : trendDelta < 0;
   return widening ? 'growing' : 'shrinking';
 }
 
-export function calculateScore(bankA, bankB) {
+function calculateScore(bankA, bankB) {
   const diff = Math.abs(bankA.current_rate - bankB.current_rate);
   let score = 0;
 
@@ -49,7 +49,7 @@ export function calculateScore(bankA, bankB) {
   return Math.min(score, 10);
 }
 
-export function getBias(bankA, bankB) {
+function getBias(bankA, bankB) {
   const diff = bankA.current_rate - bankB.current_rate;
   const trendGrowing = bankA.last_change_amount > 0 && bankB.last_change_amount <= 0;
   const guidanceA = bankA.forward_guidance;
@@ -61,19 +61,19 @@ export function getBias(bankA, bankB) {
   return 'BEARISH';
 }
 
-export function technicalBias(diff) {
+function technicalBias(diff) {
   if (Math.abs(diff) < 0.5) return 'NEUTRAL';
   return diff > 0 ? 'BULLISH' : 'BEARISH';
 }
 
-export function fundamentalBias(bankA, bankB) {
+function fundamentalBias(bankA, bankB) {
   const guidanceDiff = guidanceValue(bankA.forward_guidance) - guidanceValue(bankB.forward_guidance);
   if (guidanceDiff >= 1) return 'BULLISH';
   if (guidanceDiff <= -1) return 'BEARISH';
   return 'NEUTRAL';
 }
 
-export function combinedSignal(bankA, bankB) {
+function combinedSignal(bankA, bankB) {
   const diff = bankA.current_rate - bankB.current_rate;
   const tech = technicalBias(diff);
   const fund = fundamentalBias(bankA, bankB);
@@ -94,3 +94,14 @@ export function combinedSignal(bankA, bankB) {
 
   return { technical: tech, fundamental: fund, signal, reasoning };
 }
+
+module.exports = {
+  CURRENCY_HIERARCHY,
+  buildPairs,
+  trendDirection,
+  calculateScore,
+  getBias,
+  technicalBias,
+  fundamentalBias,
+  combinedSignal,
+};

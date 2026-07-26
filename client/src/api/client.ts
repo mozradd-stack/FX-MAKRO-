@@ -24,5 +24,5 @@ export const updatePairSignal = (pair: string, patch: { expected_change?: string
 
 export const fetchEconomicEvents = () => api.get<EconomicEvent[]>('/economic-events').then((r) => r.data);
 
-export const updateEconomicEvent = (id: number, expected_decision: string) =>
+export const updateEconomicEvent = (id: string, expected_decision: string) =>
   api.put<EconomicEvent>(`/economic-events/${id}`, { expected_decision }).then((r) => r.data);
