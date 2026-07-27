@@ -3,15 +3,14 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "install:all": "npm install --prefix functions && npm install --prefix client",
-    "seed": "npm run seed --prefix functions",
-    "dev:functions": "npm run dev --prefix functions",
+    "install:all": "npm install --prefix server && npm install --prefix client",
+    "seed": "npm run seed --prefix server",
+    "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
-    "dev": "concurrently -n functions,client -c blue,green \"npm run dev:functions\" \"npm run dev:client\"",
+    "dev": "concurrently -n server,client -c blue,green \"npm run dev:server\" \"npm run dev:client\"",
     "dev:local": "bash scripts/dev-local.sh",
     "dev:local:windows": "powershell -ExecutionPolicy Bypass -File scripts/dev-local.ps1",
-    "build": "npm run build --prefix client",
-    "deploy": "npm run build && firebase deploy --only hosting,functions"
+    "build": "npm run build --prefix client"
   },
   "devDependencies": {
     "concurrently": "^9.1.0",

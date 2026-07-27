@@ -18,14 +18,14 @@ Start-Process powershell -ArgumentList "-NoExit", "-Command", "npx firebase-tool
 Wait-ForPort 8080 "Firestore emulator"
 
 Write-Host "Seeding (skips automatically if already seeded)..."
-Push-Location "$root\functions"
+Push-Location "$root\server"
 $env:FIRESTORE_EMULATOR_HOST = "127.0.0.1:8080"
 $env:GCLOUD_PROJECT = "fx-makro-app"
 npm run seed
 Pop-Location
 
 Write-Host "Starting API on http://localhost:4001 ..."
-Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\functions'; `$env:FIRESTORE_EMULATOR_HOST='127.0.0.1:8080'; `$env:GCLOUD_PROJECT='fx-makro-app'; npm run dev"
+Start-Process powershell -ArgumentList "-NoExit", "-Command", "cd '$root\server'; `$env:FIRESTORE_EMULATOR_HOST='127.0.0.1:8080'; `$env:GCLOUD_PROJECT='fx-makro-app'; npm run dev"
 Wait-ForPort 4001 "API"
 
 Write-Host "Starting frontend on http://localhost:5173 ..."

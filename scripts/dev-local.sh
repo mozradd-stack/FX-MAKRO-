@@ -24,10 +24,10 @@ PIDS+=($!)
 npx --yes wait-on tcp:8080 --timeout 60000
 
 echo "Seeding (skips automatically if already seeded)..."
-(cd "$ROOT_DIR/functions" && npm run seed)
+(cd "$ROOT_DIR/server" && npm run seed)
 
 echo "Starting API on http://localhost:4001 ..."
-(cd "$ROOT_DIR/functions" && npm run dev) &
+(cd "$ROOT_DIR/server" && npm run dev) &
 PIDS+=($!)
 
 npx --yes wait-on tcp:4001 --timeout 30000
