@@ -9,6 +9,8 @@ const links = [
   { to: '/pairs', label: 'Pairs' },
   { to: '/central-banks', label: 'Central Banks' },
   { to: '/calendar', label: 'Calendar' },
+  { to: '/news', label: 'News' },
+  { to: '/correlation', label: 'Korrelation' },
   { to: '/settings', label: 'Settings' },
 ];
 

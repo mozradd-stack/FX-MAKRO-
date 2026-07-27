@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
-import { fetchCentralBanks, fetchPairs, updatePairSignal } from '@/api/client';
 import type { CentralBank, PairSignal } from '@/types';
 import { useWatchlist } from '@/hooks/useSettings';
 import { BiasBadge } from '@/components/ui/badge';
@@ -24,21 +23,16 @@ const trendLabel = {
   stable: 'Stabil',
 };
 
-export function PairTable() {
-  const [pairs, setPairs] = useState<PairSignal[]>([]);
-  const [banks, setBanks] = useState<CentralBank[]>([]);
+interface PairTableProps {
+  pairs: PairSignal[];
+  banks: CentralBank[];
+  onUpdatePairNotes: (pair: string, patch: { expected_change?: string; notes?: string }) => void;
+}
+
+export function PairTable({ pairs, banks, onUpdatePairNotes }: PairTableProps) {
   const [filter, setFilter] = useState<FilterMode>('all');
   const [watchlist] = useWatchlist();
   const [drafts, setDrafts] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([fetchPairs(), fetchCentralBanks()]).then(([p, b]) => {
-      setPairs(p);
-      setBanks(b);
-      setLoading(false);
-    });
-  }, []);
 
   const banksByCurrency = useMemo(() => Object.fromEntries(banks.map((b) => [b.currency, b])), [banks]);
 
@@ -55,18 +49,11 @@ export function PairTable() {
     return rows;
   }, [pairs, filter, watchlist]);
 
-  async function saveExpectedChange(pair: string, value: string) {
-    setDrafts((d) => ({ ...d, [pair]: value }));
-  }
-
-  async function commitExpectedChange(pair: string) {
+  function commitExpectedChange(pair: string) {
     const value = drafts[pair];
     if (value === undefined) return;
-    const updated = await updatePairSignal(pair, { expected_change: value });
-    setPairs((prev) => prev.map((p) => (p.pair === pair ? updated : p)));
+    onUpdatePairNotes(pair, { expected_change: value });
   }
-
-  if (loading) return <div className="py-12 text-center text-muted">Lade Pairs…</div>;
 
   return (
     <div className="space-y-4">
@@ -124,7 +111,7 @@ export function PairTable() {
                       className="h-8 w-28 rounded-md border border-border bg-background px-2 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                       placeholder="z.B. +50 pips"
                       value={drafts[p.pair] ?? p.expected_change}
-                      onChange={(e) => saveExpectedChange(p.pair, e.target.value)}
+                      onChange={(e) => setDrafts((d) => ({ ...d, [p.pair]: e.target.value }))}
                       onBlur={() => commitExpectedChange(p.pair)}
                       onKeyDown={(e) => e.key === 'Enter' && commitExpectedChange(p.pair)}
                     />

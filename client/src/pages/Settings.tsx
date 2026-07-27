@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { fetchCentralBanks, updateAllCentralBanks } from '@/api/client';
 import type { CentralBank } from '@/types';
+import { useCentralBanks } from '@/hooks/useCentralBanks';
 import { useFredApiKey } from '@/hooks/useSettings';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,23 +11,18 @@ import { Select } from '@/components/ui/select';
 export function SettingsPage() {
   const [fredKey, setFredKey] = useFredApiKey();
   const [fredDraft, setFredDraft] = useState(fredKey);
-  const [banks, setBanks] = useState<CentralBank[]>([]);
-  const [saving, setSaving] = useState(false);
+  const { banks, updateAll } = useCentralBanks();
+  const [drafts, setDrafts] = useState<CentralBank[]>(banks);
   const [savedAt, setSavedAt] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchCentralBanks().then(setBanks);
-  }, []);
+  useEffect(() => setDrafts(banks), [banks]);
 
-  function patchBank(id: string, patch: Partial<CentralBank>) {
-    setBanks((prev) => prev.map((b) => (b.id === id ? { ...b, ...patch } : b)));
+  function patchDraft(id: string, patch: Partial<CentralBank>) {
+    setDrafts((prev) => prev.map((b) => (b.id === id ? { ...b, ...patch } : b)));
   }
 
-  async function handleUpdateAll() {
-    setSaving(true);
-    const updated = await updateAllCentralBanks(banks);
-    setBanks(updated);
-    setSaving(false);
+  function handleUpdateAll() {
+    updateAll(drafts);
     setSavedAt(new Date().toLocaleTimeString('de-DE'));
   }
 
@@ -35,7 +30,7 @@ export function SettingsPage() {
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold">Settings</h1>
-        <p className="text-sm text-muted">API-Key und manuelle Datenpflege für alle Zentralbanken.</p>
+        <p className="text-sm text-muted">API-Key und manuelle Datenpflege für alle Zentralbanken. Alles wird lokal in deinem Browser gespeichert (localStorage) — es gibt keine Server-Datenbank.</p>
       </div>
 
       <Card>
@@ -63,14 +58,12 @@ export function SettingsPage() {
           <h2 className="text-lg font-semibold">Zentralbank Daten</h2>
           <div className="flex items-center gap-3">
             {savedAt && <span className="text-xs text-muted">Zuletzt gespeichert: {savedAt}</span>}
-            <Button onClick={handleUpdateAll} disabled={saving}>
-              {saving ? 'Speichere…' : 'Update All'}
-            </Button>
+            <Button onClick={handleUpdateAll}>Update All</Button>
           </div>
         </div>
 
         <div className="grid gap-4 lg:grid-cols-2">
-          {banks.map((bank) => (
+          {drafts.map((bank) => (
             <Card key={bank.id}>
               <CardHeader>
                 <CardTitle className="text-foreground text-base font-semibold">
@@ -83,7 +76,7 @@ export function SettingsPage() {
                     type="number"
                     step="0.05"
                     value={bank.current_rate}
-                    onChange={(e) => patchBank(bank.id, { current_rate: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) => patchDraft(bank.id, { current_rate: parseFloat(e.target.value) || 0 })}
                   />
                 </Field>
                 <Field label="Letzte Änderung (Betrag)">
@@ -91,27 +84,27 @@ export function SettingsPage() {
                     type="number"
                     step="0.05"
                     value={bank.last_change_amount}
-                    onChange={(e) => patchBank(bank.id, { last_change_amount: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) => patchDraft(bank.id, { last_change_amount: parseFloat(e.target.value) || 0 })}
                   />
                 </Field>
                 <Field label="Letzte Änderung (Datum)">
                   <Input
                     type="date"
                     value={bank.last_change_date}
-                    onChange={(e) => patchBank(bank.id, { last_change_date: e.target.value })}
+                    onChange={(e) => patchDraft(bank.id, { last_change_date: e.target.value })}
                   />
                 </Field>
                 <Field label="Nächste Sitzung">
                   <Input
                     type="date"
                     value={bank.next_meeting}
-                    onChange={(e) => patchBank(bank.id, { next_meeting: e.target.value })}
+                    onChange={(e) => patchDraft(bank.id, { next_meeting: e.target.value })}
                   />
                 </Field>
                 <Field label="Forward Guidance">
                   <Select
                     value={bank.forward_guidance}
-                    onChange={(e) => patchBank(bank.id, { forward_guidance: e.target.value as CentralBank['forward_guidance'] })}
+                    onChange={(e) => patchDraft(bank.id, { forward_guidance: e.target.value as CentralBank['forward_guidance'] })}
                   >
                     <option value="hawkish">Hawkish</option>
                     <option value="neutral">Neutral</option>
@@ -123,7 +116,7 @@ export function SettingsPage() {
                     type="number"
                     step="0.1"
                     value={bank.cpi}
-                    onChange={(e) => patchBank(bank.id, { cpi: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) => patchDraft(bank.id, { cpi: parseFloat(e.target.value) || 0 })}
                   />
                 </Field>
                 <Field label="Unemployment aktuell (%)">
@@ -131,7 +124,7 @@ export function SettingsPage() {
                     type="number"
                     step="0.1"
                     value={bank.unemployment}
-                    onChange={(e) => patchBank(bank.id, { unemployment: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) => patchDraft(bank.id, { unemployment: parseFloat(e.target.value) || 0 })}
                   />
                 </Field>
                 <Field label="GDP Growth (%)">
@@ -139,7 +132,7 @@ export function SettingsPage() {
                     type="number"
                     step="0.1"
                     value={bank.gdp_growth}
-                    onChange={(e) => patchBank(bank.id, { gdp_growth: parseFloat(e.target.value) || 0 })}
+                    onChange={(e) => patchDraft(bank.id, { gdp_growth: parseFloat(e.target.value) || 0 })}
                   />
                 </Field>
               </CardContent>

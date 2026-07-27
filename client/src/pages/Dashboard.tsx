@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { TrendingUp, TrendingDown, Zap } from 'lucide-react';
-import { fetchCentralBanks, fetchPairs } from '@/api/client';
-import type { CentralBank, PairSignal } from '@/types';
+import type { CentralBank } from '@/types';
+import { useCentralBanks } from '@/hooks/useCentralBanks';
+import { usePairs } from '@/hooks/usePairs';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PairTable } from '@/components/dashboard/PairTable';
 
@@ -16,26 +17,13 @@ function strengthScore(b: CentralBank) {
 }
 
 export function Dashboard() {
-  const [banks, setBanks] = useState<CentralBank[]>([]);
-  const [pairs, setPairs] = useState<PairSignal[]>([]);
+  const { banks } = useCentralBanks();
+  const { pairs, updatePairNotes } = usePairs(banks);
 
-  useEffect(() => {
-    Promise.all([fetchCentralBanks(), fetchPairs()]).then(([b, p]) => {
-      setBanks(b);
-      setPairs(p);
-    });
-  }, []);
-
-  const strongest = useMemo(
-    () => (banks.length ? [...banks].sort((a, b) => strengthScore(b) - strengthScore(a))[0] : null),
-    [banks]
-  );
-  const weakest = useMemo(
-    () => (banks.length ? [...banks].sort((a, b) => strengthScore(a) - strengthScore(b))[0] : null),
-    [banks]
-  );
+  const strongest = useMemo(() => [...banks].sort((a, b) => strengthScore(b) - strengthScore(a))[0] ?? null, [banks]);
+  const weakest = useMemo(() => [...banks].sort((a, b) => strengthScore(a) - strengthScore(b))[0] ?? null, [banks]);
   const biggestDiff = useMemo(
-    () => (pairs.length ? [...pairs].sort((a, b) => Math.abs(b.differential) - Math.abs(a.differential))[0] : null),
+    () => [...pairs].sort((a, b) => Math.abs(b.differential) - Math.abs(a.differential))[0] ?? null,
     [pairs]
   );
 
@@ -55,7 +43,7 @@ export function Dashboard() {
           <CardContent>
             <div className="text-3xl font-bold font-mono">{strongest?.currency ?? '—'}</div>
             <p className="mt-1 text-xs text-muted">
-              {strongest ? `${strongest.name} · ${strongest.current_rate.toFixed(2)}% · ${strongest.forward_guidance}` : 'Lade…'}
+              {strongest ? `${strongest.name} · ${strongest.current_rate.toFixed(2)}% · ${strongest.forward_guidance}` : '—'}
             </p>
           </CardContent>
         </Card>
@@ -67,7 +55,7 @@ export function Dashboard() {
           <CardContent>
             <div className="text-3xl font-bold font-mono">{weakest?.currency ?? '—'}</div>
             <p className="mt-1 text-xs text-muted">
-              {weakest ? `${weakest.name} · ${weakest.current_rate.toFixed(2)}% · ${weakest.forward_guidance}` : 'Lade…'}
+              {weakest ? `${weakest.name} · ${weakest.current_rate.toFixed(2)}% · ${weakest.forward_guidance}` : '—'}
             </p>
           </CardContent>
         </Card>
@@ -79,13 +67,13 @@ export function Dashboard() {
           <CardContent>
             <div className="text-3xl font-bold font-mono">{biggestDiff?.pair ?? '—'}</div>
             <p className="mt-1 text-xs text-muted">
-              {biggestDiff ? `${biggestDiff.differential > 0 ? '+' : ''}${biggestDiff.differential.toFixed(2)}% · Score ${biggestDiff.score}/10` : 'Lade…'}
+              {biggestDiff ? `${biggestDiff.differential > 0 ? '+' : ''}${biggestDiff.differential.toFixed(2)}% · Score ${biggestDiff.score}/10` : '—'}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <PairTable />
+      <PairTable pairs={pairs} banks={banks} onUpdatePairNotes={updatePairNotes} />
     </div>
   );
 }

@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { fetchPairDetail } from '@/api/client';
-import type { PairDetail } from '@/types';
+import { useCentralBanks } from '@/hooks/useCentralBanks';
+import { calculateScore, combinedSignal, getBias, buildRateHistory, trendDirection } from '@/lib/scoring';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BiasBadge } from '@/components/ui/badge';
 import { FibBox } from '@/components/pairs/FibBox';
@@ -22,20 +22,40 @@ const signalColor: Record<string, string> = {
 };
 
 export function PairAnalysis() {
-  const { pair = '' } = useParams();
-  const [detail, setDetail] = useState<PairDetail | null>(null);
-  const [error, setError] = useState(false);
+  const { pair: pairParam = '' } = useParams();
+  const { banks } = useCentralBanks();
+  const pair = pairParam.toUpperCase().replace('-', '/');
+  const [a, b] = pair.split('/');
 
-  useEffect(() => {
-    setDetail(null);
-    setError(false);
-    fetchPairDetail(pair)
-      .then(setDetail)
-      .catch(() => setError(true));
-  }, [pair]);
+  const detail = useMemo(() => {
+    const bankA = banks.find((bk) => bk.currency === a);
+    const bankB = banks.find((bk) => bk.currency === b);
+    if (!bankA || !bankB) return null;
 
-  if (error) return <div className="py-12 text-center text-muted">Pair nicht gefunden.</div>;
-  if (!detail) return <div className="py-12 text-center text-muted">Lade Pair-Daten…</div>;
+    const differential = Math.round((bankA.current_rate - bankB.current_rate) * 100) / 100;
+    const historyA = buildRateHistory(bankA);
+    const historyB = buildRateHistory(bankB);
+    const differentialHistory = historyA.map((row, i) => ({
+      date: row.effective_date,
+      differential: Math.round((row.rate - (historyB[i]?.rate ?? row.rate)) * 100) / 100,
+    }));
+
+    return {
+      signal: {
+        pair,
+        bias: getBias(bankA, bankB),
+        score: calculateScore(bankA, bankB),
+        differential,
+        trend_direction: trendDirection(bankA, bankB, differential),
+      },
+      bankA,
+      bankB,
+      differentialHistory,
+      combined: combinedSignal(bankA, bankB),
+    };
+  }, [banks, a, b, pair]);
+
+  if (!detail) return <div className="py-12 text-center text-muted">Pair nicht gefunden.</div>;
 
   const { signal, bankA, bankB, differentialHistory, combined } = detail;
 

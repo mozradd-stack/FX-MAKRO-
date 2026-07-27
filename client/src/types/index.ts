@@ -20,15 +20,12 @@ export interface CentralBank {
 }
 
 export interface RateHistoryRow {
-  id: string;
-  currency: string;
-  rate: number;
   effective_date: string;
+  rate: number;
   change_amount: number;
 }
 
 export interface PairSignal {
-  id: string;
   pair: string;
   bias: Bias;
   score: number;
@@ -36,16 +33,6 @@ export interface PairSignal {
   trend_direction: TrendDirection;
   expected_change: string;
   notes: string;
-  updated_at: string;
-}
-
-export interface EconomicEvent {
-  id: string;
-  date: string;
-  bank: string;
-  expected_decision: string;
-  importance: 'HIGH' | 'MEDIUM';
-  affected_pairs: string;
 }
 
 export interface PairDetail {
@@ -59,6 +46,36 @@ export interface PairDetail {
     signal: CombinedSignal;
     reasoning: string;
   };
+}
+
+// Derived from each bank's next_meeting date — no separate DB entity needed.
+export interface CentralBankMeeting {
+  bankId: string;
+  bank: string;
+  currency: string;
+  date: string;
+  forward_guidance: ForwardGuidance;
+  importance: 'HIGH' | 'MEDIUM';
+  affected_pairs: string[];
+}
+
+// Live feed from the ForexFactory calendar proxy (/api/news-calendar).
+export interface NewsEvent {
+  title: string;
+  country: string;
+  date: string; // ISO timestamp
+  impact: 'High' | 'Medium' | 'Low' | 'Holiday' | string;
+  forecast: string;
+  previous: string;
+  actual: string;
+}
+
+// Live proxy response from /api/fx-history (Frankfurter): date -> currency -> rate vs. base.
+export interface FxHistoryResponse {
+  base: string;
+  start: string;
+  end: string;
+  rates: Record<string, Record<string, number>>;
 }
 
 export const MY_CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY'];

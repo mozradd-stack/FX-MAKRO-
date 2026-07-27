@@ -5,6 +5,8 @@ import { PairsIndex } from '@/pages/PairsIndex';
 import { PairAnalysis } from '@/pages/PairAnalysis';
 import { CentralBanks } from '@/pages/CentralBanks';
 import { EconomicCalendar } from '@/pages/EconomicCalendar';
+import { NewsCalendar } from '@/pages/NewsCalendar';
+import { Correlation } from '@/pages/Correlation';
 import { SettingsPage } from '@/pages/Settings';
 
 function App() {
@@ -18,6 +20,8 @@ function App() {
           <Route path="/pairs/:pair" element={<PairAnalysis />} />
           <Route path="/central-banks" element={<CentralBanks />} />
           <Route path="/calendar" element={<EconomicCalendar />} />
+          <Route path="/news" element={<NewsCalendar />} />
+          <Route path="/correlation" element={<Correlation />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Routes>
       </main>

@@ -4,11 +4,6 @@ dist-ssr
 *.local
 *.log
 
-.firebase/
-firebase-debug.log
-firestore-debug.log
-ui-debug.log
-
 .DS_Store
 .vscode/*
 !.vscode/extensions.json

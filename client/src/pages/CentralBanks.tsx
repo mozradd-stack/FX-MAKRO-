@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import { Line, LineChart, ResponsiveContainer } from 'recharts';
-import { fetchCentralBanks, fetchRateHistory } from '@/api/client';
-import type { CentralBank, RateHistoryRow } from '@/types';
+import type { CentralBank } from '@/types';
+import { useCentralBanks } from '@/hooks/useCentralBanks';
+import { buildRateHistory } from '@/lib/scoring';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const guidanceStyles: Record<string, string> = {
@@ -11,11 +12,7 @@ const guidanceStyles: Record<string, string> = {
 };
 
 function BankCard({ bank }: { bank: CentralBank }) {
-  const [history, setHistory] = useState<RateHistoryRow[]>([]);
-
-  useEffect(() => {
-    fetchRateHistory(bank.currency).then(setHistory);
-  }, [bank.currency]);
+  const history = useMemo(() => buildRateHistory(bank), [bank]);
 
   return (
     <Card>
@@ -76,11 +73,7 @@ function BankCard({ bank }: { bank: CentralBank }) {
 }
 
 export function CentralBanks() {
-  const [banks, setBanks] = useState<CentralBank[]>([]);
-
-  useEffect(() => {
-    fetchCentralBanks().then(setBanks);
-  }, []);
+  const { banks } = useCentralBanks();
 
   return (
     <div className="space-y-6">
