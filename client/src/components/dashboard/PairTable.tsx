@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import type { CentralBank, PairSignal } from '@/types';
 import { useWatchlist } from '@/hooks/useSettings';
+import { divergenceClass } from '@/lib/scoring';
 import { BiasBadge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
 import { Select } from '@/components/ui/select';
@@ -23,16 +24,20 @@ const trendLabel = {
   stable: 'Stabil',
 };
 
+const divergenceStyle: Record<string, string> = {
+  'STRONG DIVERGENCE': 'border-accent text-accent',
+  ALIGNED: 'border-muted text-muted',
+  MIXED: 'border-warning text-warning',
+};
+
 interface PairTableProps {
   pairs: PairSignal[];
   banks: CentralBank[];
-  onUpdatePairNotes: (pair: string, patch: { expected_change?: string; notes?: string }) => void;
 }
 
-export function PairTable({ pairs, banks, onUpdatePairNotes }: PairTableProps) {
+export function PairTable({ pairs, banks }: PairTableProps) {
   const [filter, setFilter] = useState<FilterMode>('all');
   const [watchlist] = useWatchlist();
-  const [drafts, setDrafts] = useState<Record<string, string>>({});
 
   const banksByCurrency = useMemo(() => Object.fromEntries(banks.map((b) => [b.currency, b])), [banks]);
 
@@ -48,12 +53,6 @@ export function PairTable({ pairs, banks, onUpdatePairNotes }: PairTableProps) {
     }
     return rows;
   }, [pairs, filter, watchlist]);
-
-  function commitExpectedChange(pair: string) {
-    const value = drafts[pair];
-    if (value === undefined) return;
-    onUpdatePairNotes(pair, { expected_change: value });
-  }
 
   return (
     <div className="space-y-4">
@@ -74,8 +73,8 @@ export function PairTable({ pairs, banks, onUpdatePairNotes }: PairTableProps) {
               <TableHead className="font-mono">Zins B</TableHead>
               <TableHead className="font-mono">Differenz</TableHead>
               <TableHead>Trend</TableHead>
+              <TableHead>Divergenz</TableHead>
               <TableHead>Bias</TableHead>
-              <TableHead>Expected Change (3M)</TableHead>
               <TableHead>Score</TableHead>
             </TableRow>
           </TableHeader>
@@ -84,6 +83,7 @@ export function PairTable({ pairs, banks, onUpdatePairNotes }: PairTableProps) {
               const [a, b] = p.pair.split('/');
               const bankA = banksByCurrency[a];
               const bankB = banksByCurrency[b];
+              const divergence = bankA && bankB ? divergenceClass(bankA, bankB) : null;
               return (
                 <TableRow key={p.pair}>
                   <TableCell>
@@ -104,17 +104,14 @@ export function PairTable({ pairs, banks, onUpdatePairNotes }: PairTableProps) {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <BiasBadge bias={p.bias} />
+                    {divergence && (
+                      <span className={cn('rounded-md border px-2 py-0.5 text-xs font-medium', divergenceStyle[divergence])}>
+                        {divergence}
+                      </span>
+                    )}
                   </TableCell>
                   <TableCell>
-                    <input
-                      className="h-8 w-28 rounded-md border border-border bg-background px-2 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
-                      placeholder="z.B. +50 pips"
-                      value={drafts[p.pair] ?? p.expected_change}
-                      onChange={(e) => setDrafts((d) => ({ ...d, [p.pair]: e.target.value }))}
-                      onBlur={() => commitExpectedChange(p.pair)}
-                      onKeyDown={(e) => e.key === 'Enter' && commitExpectedChange(p.pair)}
-                    />
+                    <BiasBadge bias={p.bias} />
                   </TableCell>
                   <TableCell>
                     <span className="font-mono font-semibold">{p.score}</span>

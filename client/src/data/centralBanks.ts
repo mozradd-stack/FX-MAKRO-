@@ -1,10 +1,12 @@
 import type { CentralBank } from '@/types';
 
 // Researched real-world snapshot (policy rates + meeting dates confirmed via
-// web search; CPI/unemployment/GDP are indicative macro context, not live
-// figures — there is no unified free API for curated central-bank forward
-// guidance, so this is a manually-researched baseline the user can override
-// in Settings). Rates/meetings as of late July 2026.
+// web search; CPI/unemployment/GDP/cpi_trend are indicative macro context).
+// There is no free, no-key API that covers policy rates + forward guidance
+// across all 8 central banks (that's what paid/keyed services like FRED are
+// for) — this ships as a static, researched baseline instead. Everything
+// FX-price-based (Terminal, Correlation) is genuinely live via Frankfurter.
+// Rates/meetings as of late July 2026.
 export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
   {
     id: 'fed',
@@ -17,9 +19,9 @@ export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
     next_meeting: '2026-09-17',
     forward_guidance: 'dovish',
     cpi: 2.7,
+    cpi_trend: 'falling',
     unemployment: 4.3,
     gdp_growth: 1.9,
-    updated_at: '',
   },
   {
     id: 'ecb',
@@ -32,9 +34,9 @@ export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
     next_meeting: '2026-09-10',
     forward_guidance: 'neutral',
     cpi: 2.1,
+    cpi_trend: 'stable',
     unemployment: 6.3,
     gdp_growth: 1.0,
-    updated_at: '',
   },
   {
     id: 'boe',
@@ -47,9 +49,9 @@ export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
     next_meeting: '2026-08-06',
     forward_guidance: 'hawkish',
     cpi: 3.2,
+    cpi_trend: 'rising',
     unemployment: 4.6,
     gdp_growth: 1.0,
-    updated_at: '',
   },
   {
     id: 'boj',
@@ -62,9 +64,9 @@ export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
     next_meeting: '2026-07-31',
     forward_guidance: 'hawkish',
     cpi: 2.9,
+    cpi_trend: 'rising',
     unemployment: 2.4,
     gdp_growth: 0.9,
-    updated_at: '',
   },
   {
     id: 'snb',
@@ -77,9 +79,9 @@ export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
     next_meeting: '2026-09-24',
     forward_guidance: 'dovish',
     cpi: 0.6,
+    cpi_trend: 'falling',
     unemployment: 2.5,
     gdp_growth: 1.1,
-    updated_at: '',
   },
   {
     id: 'boc',
@@ -92,9 +94,9 @@ export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
     next_meeting: '2026-09-09',
     forward_guidance: 'dovish',
     cpi: 2.3,
+    cpi_trend: 'falling',
     unemployment: 6.9,
     gdp_growth: 1.4,
-    updated_at: '',
   },
   {
     id: 'rba',
@@ -107,9 +109,9 @@ export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
     next_meeting: '2026-08-11',
     forward_guidance: 'neutral',
     cpi: 3.4,
+    cpi_trend: 'stable',
     unemployment: 4.2,
     gdp_growth: 1.6,
-    updated_at: '',
   },
   {
     id: 'rbnz',
@@ -122,8 +124,8 @@ export const DEFAULT_CENTRAL_BANKS: CentralBank[] = [
     next_meeting: '2026-09-02',
     forward_guidance: 'dovish',
     cpi: 2.8,
+    cpi_trend: 'falling',
     unemployment: 5.1,
     gdp_growth: 0.6,
-    updated_at: '',
   },
 ];

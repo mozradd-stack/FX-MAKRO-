@@ -1,17 +1,7 @@
 import { useEffect, useState } from 'react';
 
-const FRED_KEY = 'fxmacro:fred-api-key';
 const WATCHLIST_KEY = 'fxmacro:watchlist';
 const DEFAULT_WATCHLIST = ['USD', 'EUR', 'GBP', 'JPY', 'CHF', 'CAD', 'AUD', 'NZD'];
-
-export function useFredApiKey() {
-  const [key, setKey] = useState(() => localStorage.getItem(FRED_KEY) ?? '');
-  useEffect(() => {
-    if (key) localStorage.setItem(FRED_KEY, key);
-    else localStorage.removeItem(FRED_KEY);
-  }, [key]);
-  return [key, setKey] as const;
-}
 
 export function useWatchlist() {
   const [watchlist, setWatchlist] = useState<string[]>(() => {

@@ -1,7 +1,9 @@
 export type ForwardGuidance = 'hawkish' | 'neutral' | 'dovish';
 export type TrendDirection = 'growing' | 'stable' | 'shrinking';
+export type CpiTrend = 'rising' | 'falling' | 'stable';
 export type Bias = 'STRONG BULLISH' | 'BULLISH' | 'NEUTRAL' | 'BEARISH' | 'STRONG BEARISH';
 export type CombinedSignal = 'STRONG LONG' | 'LONG' | 'NEUTRAL' | 'SHORT' | 'STRONG SHORT';
+export type Divergence = 'STRONG DIVERGENCE' | 'ALIGNED' | 'MIXED';
 
 export interface CentralBank {
   id: string;
@@ -14,9 +16,9 @@ export interface CentralBank {
   next_meeting: string;
   forward_guidance: ForwardGuidance;
   cpi: number;
+  cpi_trend: CpiTrend;
   unemployment: number;
   gdp_growth: number;
-  updated_at: string;
 }
 
 export interface RateHistoryRow {
@@ -31,8 +33,6 @@ export interface PairSignal {
   score: number;
   differential: number;
   trend_direction: TrendDirection;
-  expected_change: string;
-  notes: string;
 }
 
 export interface PairDetail {
@@ -78,4 +78,9 @@ export interface FxHistoryResponse {
   rates: Record<string, Record<string, number>>;
 }
 
-export const MY_CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY'];
+// Live proxy response from /api/fx-latest (Frankfurter): current spot rates vs. base.
+export interface FxLatestResponse {
+  base: string;
+  date: string;
+  rates: Record<string, number>;
+}

@@ -1,20 +1,15 @@
 import type { FxHistoryResponse } from '@/types';
+import { crossPrice } from '@/lib/fx';
 
 // Frankfurter gives rates vs. a single base (we always request base=USD).
-// Any pair's price series is derivable from that one fetch: price(A/B) on a
-// given day = rate[B] / rate[A], treating the base currency's own rate as 1.
+// Any pair's price series is derivable from that one fetch via crossPrice.
 export function derivePairSeries(history: FxHistoryResponse, base: string, pair: string) {
   const [a, b] = pair.split('/');
-  const rateOf = (day: Record<string, number>, currency: string) => (currency === base ? 1 : day[currency]);
-
   const dates = Object.keys(history.rates).sort();
   return dates
     .map((date) => {
-      const day = history.rates[date];
-      const rateA = rateOf(day, a);
-      const rateB = rateOf(day, b);
-      if (rateA === undefined || rateB === undefined) return null;
-      return { date, price: rateB / rateA };
+      const price = crossPrice(history.rates[date], base, a, b);
+      return price === null ? null : { date, price };
     })
     .filter((row): row is { date: string; price: number } => row !== null);
 }

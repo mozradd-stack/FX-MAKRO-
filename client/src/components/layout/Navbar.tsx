@@ -6,12 +6,12 @@ import { cn } from '@/lib/utils';
 
 const links = [
   { to: '/', label: 'Dashboard', end: true },
+  { to: '/terminal', label: 'Terminal' },
   { to: '/pairs', label: 'Pairs' },
   { to: '/central-banks', label: 'Central Banks' },
   { to: '/calendar', label: 'Calendar' },
   { to: '/news', label: 'News' },
   { to: '/correlation', label: 'Korrelation' },
-  { to: '/settings', label: 'Settings' },
 ];
 
 export function Navbar() {

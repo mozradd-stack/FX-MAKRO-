@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { FxHistoryResponse, NewsEvent } from '@/types';
+import type { FxHistoryResponse, FxLatestResponse, NewsEvent } from '@/types';
 
 const api = axios.create({ baseURL: '/api' });
 
@@ -13,4 +13,10 @@ export const fetchFxHistory = (params: { base: string; symbols: string[]; start:
     .get<FxHistoryResponse>('/fx-history', {
       params: { base: params.base, symbols: params.symbols.join(','), start: params.start, end: params.end },
     })
+    .then((r) => r.data);
+
+// Live current FX spot rates, proxied server-side from the free Frankfurter API.
+export const fetchFxLatest = (params: { base: string; symbols?: string[] }) =>
+  api
+    .get<FxLatestResponse>('/fx-latest', { params: { base: params.base, symbols: params.symbols?.join(',') } })
     .then((r) => r.data);

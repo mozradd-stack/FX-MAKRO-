@@ -18,7 +18,7 @@ function strengthScore(b: CentralBank) {
 
 export function Dashboard() {
   const { banks } = useCentralBanks();
-  const { pairs, updatePairNotes } = usePairs(banks);
+  const { pairs } = usePairs(banks);
 
   const strongest = useMemo(() => [...banks].sort((a, b) => strengthScore(b) - strengthScore(a))[0] ?? null, [banks]);
   const weakest = useMemo(() => [...banks].sort((a, b) => strengthScore(a) - strengthScore(b))[0] ?? null, [banks]);
@@ -73,7 +73,7 @@ export function Dashboard() {
         </Card>
       </div>
 
-      <PairTable pairs={pairs} banks={banks} onUpdatePairNotes={updatePairNotes} />
+      <PairTable pairs={pairs} banks={banks} />
     </div>
   );
 }

@@ -1,38 +1,72 @@
 # FX Macro — Forex Interest Rate Intelligence Platform
 
-A SaaS dashboard that tracks central bank interest rates, forward guidance and
-the resulting bias/score across all 28 major currency pairs — plus a live
-economic news calendar and a pair correlation calculator. Deploys to
-**Vercel**. No database, no Firebase, no API keys required to run it.
+A macro dashboard for interest-rate-driven FX analysis: differential/bias/score
+across all 28 major currency pairs, a live FX terminal, a live economic news
+calendar, and a correlation calculator across any Forex pair. Deploys to
+**Vercel**. No database, no Firebase, no manual data entry, no API keys
+required to run it.
 
 ## Stack
 
 - **Frontend**: React + Vite + TypeScript, Tailwind CSS + shadcn/ui-style components, Recharts, React Router
-- **Backend**: a small stateless Express app — two read-only proxy routes to free public APIs, nothing else. Runs as a Vercel serverless function in production and as a plain Node server locally.
-- **Data**: central bank rates/guidance ship as a researched static dataset bundled in the client (`client/src/data/centralBanks.ts`); all pair scores/bias are computed **client-side** from that data — there is no network round-trip for the core dashboard, which is what makes it robust. User edits (Settings page) are layered on top from `localStorage`.
-- **Live data**: historical FX rates from [Frankfurter](https://frankfurter.dev) (free, no key) power the correlation calculator; the economic news calendar is proxied from the free [ForexFactory JSON feed](https://nfs.faireconomy.media/ff_calendar_thisweek.json).
+- **Backend**: a small stateless Express app — three read-only proxy routes to free public APIs, nothing else. Runs as a Vercel serverless function in production and as a plain Node server locally.
+- **Central bank data**: rates/guidance ship as a researched static dataset bundled in the client (`client/src/data/centralBanks.ts`). Every derived value (score, bias, divergence, trajectory) is computed **client-side** — no network round-trip, which is what makes the core dashboard robust.
+- **Live data**: current + historical FX prices from [Frankfurter](https://frankfurter.dev) (free, no key) power the Terminal and the correlation calculator; the economic news calendar is proxied from the free [ForexFactory JSON feed](https://nfs.faireconomy.media/ff_calendar_thisweek.json).
+
+## Why central bank rates aren't "live"
+
+There is no free, no-key API that covers policy rates + forward guidance
+across all 8 central banks in one place — that's specifically what paid/keyed
+services (FRED, EODHD, etc.) are for, and this build intentionally avoids
+requiring any API key. So central bank rates/guidance/CPI trend are a
+researched static snapshot instead (dated in `centralBanks.ts`), while
+everything that's genuinely available live for free — FX spot and historical
+prices, the economic news feed — actually is live and auto-refreshing.
 
 ## Why no database
 
-The app previously went through SQLite → Firestore, but Firestore requires
-either ambient GCP credentials (Cloud Functions only) or a service-account
-secret wired into every hosting target, and that was the actual source of
-"pairs don't load" in production. Central bank forward guidance is
-inherently curated data anyway (no free API gives hawkish/dovish/next-meeting
-across 8 central banks), so it now ships as a static, researched dataset with
-all derived values (score, bias, differential) computed in the browser —
-zero moving parts, zero failure mode tied to a database.
+Firestore requires either ambient GCP credentials (Cloud Functions only) or a
+service-account secret wired into every hosting target — that mismatch was
+the actual cause of "pairs don't load" in production. Since central bank data
+is a static dataset anyway, every pair signal is now derived from it
+client-side via `useMemo` — zero moving parts, zero database-shaped failure
+mode. There's no manual data entry either: nothing to configure, nothing to
+persist.
+
+## The analysis rules
+
+`client/src/lib/scoring.ts` implements interest-rate-differential analysis
+per a specific rule set (see comments in the file for details):
+
+1. Direction matters more than level — `rateTrajectory()` projects where a
+   rate is heading (guidance + inflation trend), not just where it is.
+2. The differential matters more than either absolute rate.
+3. Inflation is the leading indicator — `inflationSignal()` flags when one
+   country's CPI is rising while the other's is falling.
+4. Forward guidance (hawkish/dovish/neutral) drives the trajectory signal.
+5. *(Market-implied expectations / Fed Funds Futures are not included — no
+   free no-key source for that exists; flagged rather than faked.)*
+6. Divergence produces the strongest trends — `divergenceClass()` returns
+   `STRONG DIVERGENCE` when two banks pull in opposite directions.
+7. Both banks moving the same direction = no trend — this is scored as
+   `ALIGNED` and scores **lower**, not higher (a deliberate inversion of a
+   naive "guidance alignment" score).
+8. Carry-trade unwind risk — `carryTradeRisk()` flags when a large
+   differential (≥2%) is actively shrinking (the USD/JPY 2024 pattern).
+
+The Pair Analysis page (`/pairs/:pair`) surfaces all of this directly — it's
+rate-data only, no Fibonacci-style visualization.
 
 ## Structure
 
-- `server/src/app.js` — the entire backend: `/api/news-calendar` (ForexFactory proxy, 15 min cache) and `/api/fx-history` (Frankfurter proxy, 15 min cache). No routes for banks/pairs — those need no backend at all.
+- `server/src/app.js` — the entire backend: `/api/news-calendar` (ForexFactory proxy, 15 min cache), `/api/fx-history` (Frankfurter historical proxy, 15 min cache), `/api/fx-latest` (Frankfurter current-rate proxy, 20s cache, powers the Terminal)
 - `server/dev-server.js` — local dev entry (`app.listen`); `api/index.js` — Vercel serverless entry (same Express app, different wrapper)
-- `client/src/data/centralBanks.ts` — the static default dataset (8 central banks, researched rates/meeting dates)
-- `client/src/lib/scoring.ts` — scoring/bias engine + synthetic rate-history generator, pure functions, no I/O
-- `client/src/lib/correlation.ts` — cross-rate derivation + Pearson correlation for the correlation calculator
-- `client/src/hooks/useCentralBanks.ts` — merges the static dataset with any `localStorage` edits from Settings
+- `client/src/data/centralBanks.ts` — the static default dataset (8 central banks, researched rates/meeting dates/CPI trend)
+- `client/src/lib/scoring.ts` — scoring/bias/trajectory/divergence engine, pure functions, no I/O
+- `client/src/lib/correlation.ts` / `client/src/lib/fx.ts` — cross-rate derivation + Pearson correlation for the Terminal and correlation calculator
+- `client/src/hooks/useCentralBanks.ts` — exposes the static bank list
 - `client/src/hooks/usePairs.ts` — derives all 28 pair signals from the bank list via `useMemo`
-- `client/` pages: Dashboard, Pairs, Pair Analysis, Central Banks, Calendar (derived from bank meeting dates), News (live ForexFactory feed), Correlation, Settings
+- `client/` pages: Dashboard, Terminal (live), Pairs, Pair Analysis, Central Banks, Calendar (derived from bank meeting dates), News (live), Correlation (live)
 
 ## Running locally
 
@@ -54,15 +88,15 @@ Then open **http://localhost:5173**. `Ctrl+C` stops both.
 
 ## Pages
 
-- `/` — Dashboard with hero stats and the full 28-pair table
-- `/pairs` / `/pairs/:pair` — Pair index and per-pair Fib-Box + signal analysis
-- `/central-banks` — 8 central bank cards with rate history
+- `/` — Dashboard with hero stats and the full 28-pair table (differential, trend, divergence, bias, score)
+- `/terminal` — Live FX price ticker for all 28 pairs (Frankfurter, auto-refreshes every 20s), with rate-bias context
+- `/pairs` / `/pairs/:pair` — Pair index and per-pair rate-only fundamental analysis (trajectory, divergence, inflation signal, carry-trade risk, checklist)
+- `/central-banks` — 8 central bank cards with rate history and CPI trend
 - `/calendar` — Central bank meeting dates (derived from the bank dataset), with live countdowns
 - `/news` — Live economic news calendar (ForexFactory feed)
-- `/correlation` — Pick 2–8 pairs, get a Pearson correlation matrix + indexed price chart from real historical FX data
-- `/settings` — FRED API key (localStorage, for future FRED integration) + manual central bank data editing (localStorage)
+- `/correlation` — Build a custom "setup" from any of ~27 tradable currencies, get a Pearson correlation matrix (click a cell for a plain-language verdict) + indexed price chart from real historical FX data
 
 ## Next steps
 
-FRED API live-data integration, user accounts/auth, and Stripe subscriptions
-were intentionally left out of this build and can be layered on top.
+User accounts/auth and Stripe subscriptions were intentionally left out of
+this build and can be layered on top.

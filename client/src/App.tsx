@@ -7,7 +7,7 @@ import { CentralBanks } from '@/pages/CentralBanks';
 import { EconomicCalendar } from '@/pages/EconomicCalendar';
 import { NewsCalendar } from '@/pages/NewsCalendar';
 import { Correlation } from '@/pages/Correlation';
-import { SettingsPage } from '@/pages/Settings';
+import { Terminal } from '@/pages/Terminal';
 
 function App() {
   return (
@@ -16,13 +16,13 @@ function App() {
       <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
         <Routes>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/terminal" element={<Terminal />} />
           <Route path="/pairs" element={<PairsIndex />} />
           <Route path="/pairs/:pair" element={<PairAnalysis />} />
           <Route path="/central-banks" element={<CentralBanks />} />
           <Route path="/calendar" element={<EconomicCalendar />} />
           <Route path="/news" element={<NewsCalendar />} />
           <Route path="/correlation" element={<Correlation />} />
-          <Route path="/settings" element={<SettingsPage />} />
         </Routes>
       </main>
     </div>

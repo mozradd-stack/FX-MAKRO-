@@ -1,4 +1,4 @@
-import type { Bias, CentralBank, CombinedSignal, ForwardGuidance, TrendDirection } from '@/types';
+import type { Bias, CentralBank, CombinedSignal, CpiTrend, Divergence, ForwardGuidance, TrendDirection } from '@/types';
 
 // Currency hierarchy used to build the 28 canonical FX pairs (base/quote order
 // follows standard market convention: EUR > GBP > AUD > NZD > USD > CAD > CHF > JPY)
@@ -27,6 +27,19 @@ export function trendDirection(bankA: CentralBank, bankB: CentralBank, diff: num
   return widening ? 'growing' : 'shrinking';
 }
 
+// Rule: divergence (banks pulling in opposite directions) produces the
+// strongest, longest FX trends. Both moving the same direction means the
+// differential isn't going anywhere — no trend. This is the single source
+// of truth for that classification; the score and the Pair Analysis page
+// both read it instead of duplicating the logic.
+export function divergenceClass(bankA: CentralBank, bankB: CentralBank): Divergence {
+  const a = bankA.forward_guidance;
+  const b = bankB.forward_guidance;
+  if (a === b) return 'ALIGNED'; // includes both-neutral: no directional pull either way
+  if (a === 'neutral' || b === 'neutral') return 'MIXED';
+  return 'STRONG DIVERGENCE'; // one hawkish, one dovish
+}
+
 export function calculateScore(bankA: CentralBank, bankB: CentralBank): number {
   const diff = Math.abs(bankA.current_rate - bankB.current_rate);
   let score = 0;
@@ -37,15 +50,19 @@ export function calculateScore(bankA: CentralBank, bankB: CentralBank): number {
   else if (diff >= 0.5) score += 2;
   else score += 0;
 
-  // Trend Richtung (0-3 Punkte)
+  // Trend Richtung (0-3 Punkte) — nicht das Niveau zählt, sondern wohin sich
+  // die Differenz bewegt.
   const trend = trendDirection(bankA, bankB, bankA.current_rate - bankB.current_rate);
   if (trend === 'growing') score += 3;
   else if (trend === 'stable') score += 1;
   else score += 0;
 
-  // Forward Guidance Alignment (0-3 Punkte)
-  if (bankA.forward_guidance === bankB.forward_guidance) score += 3;
-  else if (bankA.forward_guidance === 'neutral' || bankB.forward_guidance === 'neutral') score += 1;
+  // Divergenz (0-3 Punkte) — Divergenz erzeugt die stärksten Trends;
+  // laufen beide Zentralbanken in dieselbe Richtung, gibt es keinen
+  // fundamentalen Edge.
+  const divergence = divergenceClass(bankA, bankB);
+  if (divergence === 'STRONG DIVERGENCE') score += 3;
+  else if (divergence === 'MIXED') score += 2;
   else score += 0;
 
   return Math.min(score, 10);
@@ -96,6 +113,73 @@ export function combinedSignal(bankA: CentralBank, bankB: CentralBank) {
     `Technisch und fundamental zusammen ergibt sich ein ${signal.toLowerCase()}-Signal.`;
 
   return { technical: tech, fundamental: fund, signal, reasoning };
+}
+
+// Rule 1: not the current rate, but where it's heading over the next
+// 6-12 months. We don't have live Fed Funds Futures / OIS market pricing
+// (no free no-key source for that), so this is a transparent heuristic:
+// forward guidance is the base direction, inflation trend either confirms
+// it (leading indicator, rule 3) or flags that a pivot may be coming.
+export interface Trajectory {
+  label: string;
+  direction: 'up' | 'down' | 'flat';
+  confidence: 'confirmed' | 'watch' | 'neutral';
+}
+
+export function rateTrajectory(bank: CentralBank): Trajectory {
+  const g = bank.forward_guidance;
+  const t = bank.cpi_trend;
+
+  if (g === 'hawkish') {
+    if (t !== 'falling') return { label: 'Wahrscheinlich weitere Zinserhöhungen', direction: 'up', confidence: 'confirmed' };
+    return { label: 'Hawkish, aber Inflation fällt — Guidance könnte sich bald abschwächen', direction: 'up', confidence: 'watch' };
+  }
+  if (g === 'dovish') {
+    if (t !== 'rising') return { label: 'Wahrscheinlich weitere Zinssenkungen', direction: 'down', confidence: 'confirmed' };
+    return { label: 'Dovish, aber Inflation steigt — Kurswechsel möglich', direction: 'down', confidence: 'watch' };
+  }
+  if (t === 'rising') return { label: 'Neutral, aber steigende Inflation könnte zu Hawkish-Wende führen', direction: 'flat', confidence: 'watch' };
+  if (t === 'falling') return { label: 'Neutral, aber fallende Inflation könnte zu Dovish-Wende führen', direction: 'flat', confidence: 'watch' };
+  return { label: 'Zins wahrscheinlich stabil', direction: 'flat', confidence: 'neutral' };
+}
+
+// Rule 3: inflation is the leading indicator — it moves first, the rate
+// decision follows 3-6 months later.
+export function inflationSignal(bankA: CentralBank, bankB: CentralBank): string {
+  const a = bankA.cpi_trend;
+  const b = bankB.cpi_trend;
+  if (a === b) {
+    return `Inflation in ${bankA.currency} und ${bankB.currency} bewegt sich ähnlich (${a}) — kein klares Differenzsignal aus der Inflation allein.`;
+  }
+  const risingCur = a === 'rising' ? bankA.currency : bankB.currency;
+  const fallingCur = a === 'falling' ? bankA.currency : bankB.currency;
+  if ((a === 'rising' && b === 'falling') || (a === 'falling' && b === 'rising')) {
+    return `Inflation in ${risingCur} steigt, in ${fallingCur} fällt — ${risingCur} könnte in 3–6 Monaten die Zinsen erhöhen, ${fallingCur} könnte senken, bevor es in der Zinsentscheidung sichtbar wird.`;
+  }
+  return `Inflation in ${bankA.currency} (${a}) und ${bankB.currency} (${b}) läuft unterschiedlich — beobachten, ob sich eine der beiden Zentralbanken dadurch neu positioniert.`;
+}
+
+// Rule 8: when a large differential suddenly shrinks, carry trades unwind
+// all at once — sharp, fast counter-moves even against a years-long trend
+// (USD/JPY 2024 is the textbook example).
+export function carryTradeRisk(differential: number, trend: TrendDirection): { atRisk: boolean; message: string } {
+  const atRisk = Math.abs(differential) >= 2 && trend === 'shrinking';
+  const message = atRisk
+    ? `Große Zinsdifferenz (${Math.abs(differential).toFixed(2)}%) schrumpft gerade — klassisches Carry-Trade-Unwind-Setup. Kann selbst einen langjährigen Trend in wenigen Wochen umkehren (siehe USD/JPY 2024).`
+    : 'Kein akutes Carry-Trade-Unwind-Risiko erkennbar.';
+  return { atRisk, message };
+}
+
+export function guidanceLabel(g: ForwardGuidance): string {
+  if (g === 'hawkish') return 'Hawkish';
+  if (g === 'dovish') return 'Dovish';
+  return 'Neutral';
+}
+
+export function cpiTrendLabel(t: CpiTrend): string {
+  if (t === 'rising') return 'steigend';
+  if (t === 'falling') return 'fallend';
+  return 'stabil';
 }
 
 // 24 months of synthetic-but-deterministic rate history per currency,

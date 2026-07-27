@@ -55,7 +55,7 @@ function BankCard({ bank }: { bank: CentralBank }) {
 
         <div className="grid grid-cols-3 gap-2 border-t border-border pt-3 text-xs">
           <div>
-            <div className="text-muted">CPI</div>
+            <div className="text-muted">CPI ({bank.cpi_trend === 'rising' ? '↑' : bank.cpi_trend === 'falling' ? '↓' : '→'})</div>
             <div className="font-mono font-semibold">{bank.cpi.toFixed(1)}%</div>
           </div>
           <div>

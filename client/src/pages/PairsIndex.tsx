@@ -4,15 +4,15 @@ import { PairTable } from '@/components/dashboard/PairTable';
 
 export function PairsIndex() {
   const { banks } = useCentralBanks();
-  const { pairs, updatePairNotes } = usePairs(banks);
+  const { pairs } = usePairs(banks);
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Pair Analyse</h1>
-        <p className="text-sm text-muted">Wähle ein Pair für die detaillierte Fib-Box- und Signal-Analyse.</p>
+        <p className="text-sm text-muted">Wähle ein Pair für die detaillierte Zins-Analyse.</p>
       </div>
-      <PairTable pairs={pairs} banks={banks} onUpdatePairNotes={updatePairNotes} />
+      <PairTable pairs={pairs} banks={banks} />
     </div>
   );
 }

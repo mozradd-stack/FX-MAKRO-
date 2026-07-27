@@ -54,7 +54,7 @@ router.get('/news-calendar', async (req, res) => {
 
 // ---- live historical FX rates (Frankfurter — free, no key) ----
 // Used by the correlation calculator to derive historical price series for
-// any of the 28 pairs from a single base-currency fetch.
+// any pair from a single base-currency fetch.
 router.get('/fx-history', async (req, res) => {
   const base = String(req.query.base || 'USD').toUpperCase();
   const symbols = String(req.query.symbols || '')
@@ -68,10 +68,10 @@ router.get('/fx-history', async (req, res) => {
     return res.status(400).json({ error: 'start, end and symbols are required' });
   }
 
-  const cacheKey = `fx:${base}:${symbols.join(',')}:${start}:${end}`;
+  const cacheKey = `fx-history:${base}:${symbols.join(',')}:${start}:${end}`;
   try {
     const data = await cached(cacheKey, CACHE_TTL_MS, async () => {
-      const url = `https://api.frankfurter.dev/v2/${start}..${end}?base=${base}&symbols=${symbols.join(',')}`;
+      const url = `https://api.frankfurter.dev/v1/${start}..${end}?base=${base}&symbols=${symbols.join(',')}`;
       const upstream = await fetch(url, { headers: BROWSER_HEADERS });
       if (!upstream.ok) throw new Error(`Frankfurter returned ${upstream.status}`);
       const raw = await upstream.json();
@@ -80,6 +80,31 @@ router.get('/fx-history', async (req, res) => {
     res.json(data);
   } catch (err) {
     res.status(502).json({ error: 'fx-history upstream failed', detail: String(err.message || err) });
+  }
+});
+
+// ---- live current FX spot rates (Frankfurter — free, no key) ----
+// Powers the live Terminal ticker. Short cache TTL so it actually feels live
+// while still not hammering the upstream on every client poll.
+const LATEST_CACHE_TTL_MS = 20 * 1000;
+router.get('/fx-latest', async (req, res) => {
+  const base = String(req.query.base || 'USD').toUpperCase();
+  const symbols = String(req.query.symbols || '')
+    .split(',')
+    .map((s) => s.trim().toUpperCase())
+    .filter(Boolean);
+
+  try {
+    const data = await cached(`fx-latest:${base}:${symbols.join(',')}`, LATEST_CACHE_TTL_MS, async () => {
+      const url = `https://api.frankfurter.dev/v1/latest?base=${base}${symbols.length ? `&symbols=${symbols.join(',')}` : ''}`;
+      const upstream = await fetch(url, { headers: BROWSER_HEADERS });
+      if (!upstream.ok) throw new Error(`Frankfurter returned ${upstream.status}`);
+      const raw = await upstream.json();
+      return { base: raw.base, date: raw.date, rates: raw.rates };
+    });
+    res.json(data);
+  } catch (err) {
+    res.status(502).json({ error: 'fx-latest upstream failed', detail: String(err.message || err) });
   }
 });
 
