@@ -20,23 +20,48 @@ Firebase: Firestore, Cloud Functions and Hosting (project `fx-makro-app`).
 ## Running locally
 
 Local dev talks to a **Firestore emulator**, never the real project. Requires
-Node.js 20+ and a JDK (the emulator runs on Java) — Node from
-[nodejs.org](https://nodejs.org), a JDK e.g. via `brew install openjdk` (macOS)
-or `apt install default-jdk` (Linux).
+Node.js 20+ and a JDK (the emulator runs on Java).
+
+### Windows
+
+1. Install [Node.js LTS](https://nodejs.org) (installer, just click through)
+2. Install a JDK, e.g. [Temurin 21](https://adoptium.net/temurin/releases/?version=21) (installer, just click through)
+3. Install [Git for Windows](https://git-scm.com/download/win) if you don't have `git` yet
+4. In PowerShell:
+   ```powershell
+   git clone https://github.com/mozradd-stack/FX-MAKRO-.git
+   cd FX-MAKRO-
+   git checkout claude/google-docs-link-6sz4gi
+   npm run install:all
+   npm run dev:local:windows
+   ```
+
+This opens three PowerShell windows (Firestore emulator, API, frontend) and
+your browser automatically once everything is ready. Close the three windows
+to stop it. If PowerShell refuses to run the script at all, it's the default
+script execution policy — the command above already passes
+`-ExecutionPolicy Bypass` so this shouldn't happen, but if it does, run
+PowerShell **as Administrator** once and use the same command.
+
+### macOS / Linux
 
 ```bash
 npm run install:all   # installs root + functions + client dependencies
 npm run dev:local     # starts the Firestore emulator, seeds it, then runs API + frontend
 ```
 
-Then open **http://localhost:5173**. `Ctrl+C` stops everything. This is one
-script (`scripts/dev-local.sh`) that sequences: Firestore emulator (port 8080)
-→ seed (idempotent — skips if `central_banks` already has data; pass `--force`
-to `functions/src/seed.js` to overwrite) → API on port 4001 → Vite on port
-5173, which proxies `/api` to the API.
+Then open **http://localhost:5173**. `Ctrl+C` stops everything.
+
+### What it's doing
+
+Both scripts (`scripts/dev-local.sh` / `scripts/dev-local.ps1`) sequence the
+same four things: Firestore emulator (port 8080) → seed (idempotent — skips
+if `central_banks` already has data; pass `--force` to `functions/src/seed.js`
+to overwrite) → API on port 4001 → Vite on port 5173, which proxies `/api` to
+the API.
 
 If you'd rather run each piece by hand (e.g. to see individual logs), the
-three commands `scripts/dev-local.sh` wraps are:
+underlying commands are:
 
 ```bash
 npx firebase-tools emulators:start --only firestore --project fx-makro-app
@@ -44,6 +69,8 @@ FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 GCLOUD_PROJECT=fx-makro-app npm run seed 
 FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 GCLOUD_PROJECT=fx-makro-app npm run dev --prefix functions
 npm run dev --prefix client
 ```
+
+(on Windows PowerShell, set env vars per command as `$env:FIRESTORE_EMULATOR_HOST="127.0.0.1:8080"` instead)
 
 ## Deploying
 
