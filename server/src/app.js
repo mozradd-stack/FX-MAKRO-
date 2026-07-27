@@ -108,6 +108,82 @@ router.get('/fx-latest', async (req, res) => {
   }
 });
 
+// ---- live official policy rates (Bank of Canada / ECB / SNB — all free,
+// no key) ---- Fed/BoE/BoJ/RBA/RBNZ don't have a comparably clean free JSON
+// API (only old CSV/scraping-style interfaces), so those stay on the
+// researched dataset. Each fetcher is fully isolated: a bad response shape
+// from one bank never breaks the others, it just returns null for that bank.
+const LIVE_RATES_CACHE_TTL_MS = 10 * 60 * 1000;
+
+async function fetchWithTimeout(url, timeoutMs = 8000) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { headers: BROWSER_HEADERS, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function asFiniteRate(value) {
+  const n = Number(value);
+  return Number.isFinite(n) && n > -5 && n < 25 ? n : null;
+}
+
+// Bank of Canada Valet API — CBC20210 = Target for the Overnight Rate.
+async function fetchBocRate() {
+  const upstream = await fetchWithTimeout('https://www.bankofcanada.ca/valet/observations/CBC20210/json?recent=1');
+  if (!upstream.ok) throw new Error(`BoC Valet returned ${upstream.status}`);
+  const raw = await upstream.json();
+  const obs = raw?.observations?.[raw.observations.length - 1];
+  const rate = asFiniteRate(obs?.CBC20210?.v);
+  if (rate === null) throw new Error('BoC Valet: unexpected response shape');
+  return { rate, asOf: obs.d, source: 'Bank of Canada Valet API' };
+}
+
+// ECB Data Portal SDW REST API — deposit facility rate, SDMX-JSON.
+async function fetchEcbRate() {
+  const upstream = await fetchWithTimeout(
+    'https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR.LEV?format=jsondata&lastNObservations=1'
+  );
+  if (!upstream.ok) throw new Error(`ECB SDW returned ${upstream.status}`);
+  const raw = await upstream.json();
+  const series = Object.values(raw?.dataSets?.[0]?.series ?? {})[0];
+  const observations = series?.observations ?? {};
+  const lastIndex = Object.keys(observations).sort((a, b) => Number(a) - Number(b)).pop();
+  const rate = asFiniteRate(observations?.[lastIndex]?.[0]);
+  const dateValues = raw?.structure?.dimensions?.observation?.[0]?.values;
+  const asOf = dateValues?.[Number(lastIndex)]?.id ?? dateValues?.[dateValues.length - 1]?.id;
+  if (rate === null) throw new Error('ECB SDW: unexpected response shape');
+  return { rate, asOf: asOf ?? null, source: 'ECB Data Portal (Deposit Facility Rate)' };
+}
+
+// SNB Data Portal cube API — official policy rate.
+async function fetchSnbRate() {
+  const upstream = await fetchWithTimeout('https://data.snb.ch/api/cube/snboffzisa/data/json/en');
+  if (!upstream.ok) throw new Error(`SNB Data Portal returned ${upstream.status}`);
+  const raw = await upstream.json();
+  const timeseries = raw?.cube?.[0]?.timeseries ?? raw?.timeseries ?? [];
+  const points = timeseries?.[0]?.values ?? [];
+  const last = points?.[points.length - 1];
+  const rate = asFiniteRate(last?.value ?? last?.val ?? last?.v);
+  const asOf = last?.date ?? last?.d ?? null;
+  if (rate === null) throw new Error('SNB Data Portal: unexpected response shape');
+  return { rate, asOf, source: 'SNB Data Portal (Leitzins)' };
+}
+
+router.get('/live-rates', async (req, res) => {
+  const data = await cached('live-rates', LIVE_RATES_CACHE_TTL_MS, async () => {
+    const [boc, ecb, snb] = await Promise.all([
+      fetchBocRate().catch(() => null),
+      fetchEcbRate().catch(() => null),
+      fetchSnbRate().catch(() => null),
+    ]);
+    return { boc, ecb, snb, fetchedAt: new Date().toISOString() };
+  });
+  res.json(data);
+});
+
 app.use('/api', router);
 app.get('/api/health', (req, res) => res.json({ ok: true }));
 

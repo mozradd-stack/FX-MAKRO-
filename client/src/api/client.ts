@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { FxHistoryResponse, FxLatestResponse, NewsEvent } from '@/types';
+import type { FxHistoryResponse, FxLatestResponse, LiveRatesResponse, NewsEvent } from '@/types';
 
 const api = axios.create({ baseURL: '/api' });
 
@@ -20,3 +20,7 @@ export const fetchFxLatest = (params: { base: string; symbols?: string[] }) =>
   api
     .get<FxLatestResponse>('/fx-latest', { params: { base: params.base, symbols: params.symbols?.join(',') } })
     .then((r) => r.data);
+
+// Live official policy rates for the banks that have a free no-key API
+// (Bank of Canada, ECB, SNB). Per-bank null means that fetch failed upstream.
+export const fetchLiveRates = () => api.get<LiveRatesResponse>('/live-rates').then((r) => r.data);

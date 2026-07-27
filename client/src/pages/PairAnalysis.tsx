@@ -1,8 +1,10 @@
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { AlertTriangle, ArrowDown, ArrowRight, ArrowUp, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle, ArrowDown, ArrowRight, ArrowUp, CheckCircle2, Radio } from 'lucide-react';
 import { useCentralBanks } from '@/hooks/useCentralBanks';
+import { useLiveRates } from '@/hooks/useLiveRates';
+import type { LiveRate } from '@/types';
 import {
   calculateScore,
   carryTradeRisk,
@@ -51,6 +53,12 @@ const ZONES = [
 export function PairAnalysis() {
   const { pair: pairParam = '' } = useParams();
   const { banks } = useCentralBanks();
+  const liveRates = useLiveRates();
+  const liveByBankId: Record<string, LiveRate | null> = {
+    boc: liveRates?.boc ?? null,
+    ecb: liveRates?.ecb ?? null,
+    snb: liveRates?.snb ?? null,
+  };
   const pair = pairParam.toUpperCase().replace('-', '/');
   const [a, b] = pair.split('/');
 
@@ -215,6 +223,12 @@ export function PairAnalysis() {
           <Card key={bank.id}>
             <CardHeader>
               <CardTitle>{bank.name} ({bank.currency})</CardTitle>
+              {liveByBankId[bank.id] && (
+                <div className="flex items-center gap-1.5 text-xs text-success">
+                  <Radio className="h-3 w-3" />
+                  Live: {liveByBankId[bank.id]!.rate.toFixed(2)}% {liveByBankId[bank.id]!.asOf && `(${liveByBankId[bank.id]!.asOf})`}
+                </div>
+              )}
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div className="flex justify-between">

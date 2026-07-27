@@ -13,15 +13,28 @@ required to run it.
 - **Central bank data**: rates/guidance ship as a researched static dataset bundled in the client (`client/src/data/centralBanks.ts`). Every derived value (score, bias, divergence, trajectory) is computed **client-side** — no network round-trip, which is what makes the core dashboard robust.
 - **Live data**: current + historical FX prices from [Frankfurter](https://frankfurter.dev) (free, no key) power the Terminal and the correlation calculator; the economic news calendar is proxied from the free [ForexFactory JSON feed](https://nfs.faireconomy.media/ff_calendar_thisweek.json).
 
-## Why central bank rates aren't "live"
+## Why central bank rates aren't (all) live
 
 There is no free, no-key API that covers policy rates + forward guidance
 across all 8 central banks in one place — that's specifically what paid/keyed
 services (FRED, EODHD, etc.) are for, and this build intentionally avoids
-requiring any API key. So central bank rates/guidance/CPI trend are a
-researched static snapshot instead (dated in `centralBanks.ts`), while
-everything that's genuinely available live for free — FX spot and historical
-prices, the economic news feed — actually is live and auto-refreshing.
+requiring any API key. Three banks *do* have a free official no-key API for
+their policy rate specifically, and `/api/live-rates` fetches those live:
+
+- **Bank of Canada** — [Valet API](https://www.bankofcanada.ca/valet-api-how-to/), series `CBC20210`
+- **ECB** — [Data Portal SDW REST API](https://data-api.ecb.europa.eu/service/data/FM/D.U2.EUR.4F.KR.DFR.LEV), deposit facility rate
+- **SNB** — [Data Portal cube API](https://data.snb.ch/api/cube/snboffzisa/data/json/en), official interest rate
+
+Each fetch is fully isolated (`server/src/app.js`): if one bank's upstream
+response shape doesn't match what's expected, that fetch fails safely to
+`null` — the other two are unaffected, and the affected bank's card just
+shows the researched value without a "Live" badge instead of breaking.
+Fed/BoE/BoJ/RBA/RBNZ have no comparably clean free JSON API (only
+old-style CSV downloads or scraping-shaped interfaces), so those five and
+everything else (forward guidance, CPI, next meeting date) stay a researched
+static snapshot (dated in `centralBanks.ts`). Everything else genuinely live
+— FX spot/historical prices, the economic news feed — is live and
+auto-refreshing.
 
 ## Why no database
 
@@ -59,7 +72,7 @@ rate-data only, no Fibonacci-style visualization.
 
 ## Structure
 
-- `server/src/app.js` — the entire backend: `/api/news-calendar` (ForexFactory proxy, 15 min cache), `/api/fx-history` (Frankfurter historical proxy, 15 min cache), `/api/fx-latest` (Frankfurter current-rate proxy, 20s cache, powers the Terminal)
+- `server/src/app.js` — the entire backend: `/api/news-calendar` (ForexFactory proxy, 15 min cache), `/api/fx-history` (Frankfurter historical proxy, 15 min cache), `/api/fx-latest` (Frankfurter current-rate proxy, 20s cache, powers the Terminal), `/api/live-rates` (BoC/ECB/SNB official policy rates, 10 min cache, each bank isolated)
 - `server/dev-server.js` — local dev entry (`app.listen`); `api/index.js` — Vercel serverless entry (same Express app, different wrapper)
 - `client/src/data/centralBanks.ts` — the static default dataset (8 central banks, researched rates/meeting dates/CPI trend)
 - `client/src/lib/scoring.ts` — scoring/bias/trajectory/divergence engine, pure functions, no I/O
@@ -85,6 +98,16 @@ Then open **http://localhost:5173**. `Ctrl+C` stops both.
    GitHub repo. Vercel reads `vercel.json` automatically.
 2. Deploy — that's it, no environment variables needed. Every push to the
    connected branch redeploys automatically.
+
+**Worth checking after a deploy**: the dev sandbox this was built in has an
+outbound network policy that blocks all the external APIs used here
+(Frankfurter, ForexFactory, BoC/ECB/SNB), so none of the live routes could be
+exercised against the real upstream during development — only their
+error-handling paths were verified. Vercel has normal internet access, but
+it's worth opening `/terminal`, `/news`, `/correlation`, and `/central-banks`
+once after the first deploy to confirm the live badges/data actually show up
+(BoC/ECB/SNB in particular — their fetchers were written from API docs +
+search results without being able to test a real response).
 
 ## Pages
 

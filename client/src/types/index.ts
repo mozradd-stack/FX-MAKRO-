@@ -84,3 +84,20 @@ export interface FxLatestResponse {
   date: string;
   rates: Record<string, number>;
 }
+
+// Live proxy response from /api/live-rates (BoC Valet / ECB SDW / SNB Data
+// Portal — real official policy rates). null per bank means that specific
+// live fetch failed or the upstream response shape didn't match — falls
+// back to the researched value, never breaks the page.
+export interface LiveRate {
+  rate: number;
+  asOf: string | null;
+  source: string;
+}
+
+export interface LiveRatesResponse {
+  boc: LiveRate | null;
+  ecb: LiveRate | null;
+  snb: LiveRate | null;
+  fetchedAt: string;
+}
