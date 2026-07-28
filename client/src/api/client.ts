@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { FxHistoryResponse, FxLatestResponse, LiveRatesResponse, NewsEvent } from '@/types';
+import type { AiRatesResponse, FxHistoryResponse, FxLatestResponse, LiveRatesResponse, NewsEvent } from '@/types';
 
 const api = axios.create({ baseURL: '/api' });
 
@@ -24,3 +24,8 @@ export const fetchFxLatest = (params: { base: string; symbols?: string[] }) =>
 // Live official policy rates for the banks that have a free no-key API
 // (Bank of Canada, ECB, SNB). Per-bank null means that fetch failed upstream.
 export const fetchLiveRates = () => api.get<LiveRatesResponse>('/live-rates').then((r) => r.data);
+
+// AI-researched policy rates (Claude + web search) for the 5 banks with no
+// free official API. `enabled: false` means no server-side API key is
+// configured — every bank is null and this is a no-op.
+export const fetchAiRates = () => api.get<AiRatesResponse>('/ai-rates').then((r) => r.data);

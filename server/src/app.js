@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { researchCentralBanksViaAi, AI_BANKS } = require('./aiResearch');
 
 const app = express();
 app.use(cors());
@@ -180,6 +181,32 @@ router.get('/live-rates', async (req, res) => {
       fetchSnbRate().catch(() => null),
     ]);
     return { boc, ecb, snb, fetchedAt: new Date().toISOString() };
+  });
+  res.json(data);
+});
+
+// ---- AI-assisted policy-rate research (Fed / BoE / BoJ / RBA / RBNZ) ----
+// These 5 banks have no free no-key JSON API at all, so instead of staying
+// on the static dataset forever we optionally let Claude look them up via
+// the web_search tool. Entirely opt-in: with no ANTHROPIC_API_KEY set this
+// route just reports itself as disabled and the app is unaffected — same
+// graceful-degradation shape as /api/live-rates. The 7-day in-memory cache
+// keeps this to roughly one Claude call per week under normal traffic (a
+// cold serverless instance can reset the cache early, but each call only
+// costs a few cents, so that's a soft cost bound, not a real risk).
+const AI_RATES_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+
+router.get('/ai-rates', async (req, res) => {
+  const data = await cached('ai-rates', AI_RATES_CACHE_TTL_MS, async () => {
+    const empty = Object.fromEntries(AI_BANKS.map((b) => [b.id, null]));
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return { ...empty, fetchedAt: new Date().toISOString(), enabled: false };
+    }
+    const result = await researchCentralBanksViaAi().catch(() => ({
+      ...empty,
+      fetchedAt: new Date().toISOString(),
+    }));
+    return { ...result, enabled: true };
   });
   res.json(data);
 });

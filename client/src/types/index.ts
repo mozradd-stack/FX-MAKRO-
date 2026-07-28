@@ -101,3 +101,25 @@ export interface LiveRatesResponse {
   snb: LiveRate | null;
   fetchedAt: string;
 }
+
+// AI-researched policy-rate response from /api/ai-rates (Claude + web search)
+// for the 5 banks with no free official JSON API (Fed, BoE, BoJ, RBA, RBNZ).
+// `enabled` is false when no ANTHROPIC_API_KEY is configured server-side —
+// in that case every bank is null and the app just stays on the researched
+// static dataset, same fallback shape as LiveRatesResponse.
+export interface AiBankData {
+  rate: number;
+  guidance: ForwardGuidance;
+  nextMeeting: string | null;
+  asOf: string | null;
+}
+
+export interface AiRatesResponse {
+  fed: AiBankData | null;
+  boe: AiBankData | null;
+  boj: AiBankData | null;
+  rba: AiBankData | null;
+  rbnz: AiBankData | null;
+  fetchedAt: string;
+  enabled: boolean;
+}

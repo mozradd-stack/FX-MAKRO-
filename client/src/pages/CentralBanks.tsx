@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { Line, LineChart, ResponsiveContainer } from 'recharts';
-import { Radio } from 'lucide-react';
-import type { CentralBank, LiveRate } from '@/types';
+import { Radio, Sparkles } from 'lucide-react';
+import type { AiBankData, CentralBank, LiveRate } from '@/types';
 import { useCentralBanks } from '@/hooks/useCentralBanks';
 import { useLiveRates } from '@/hooks/useLiveRates';
+import { useAiRates } from '@/hooks/useAiRates';
 import { buildRateHistory } from '@/lib/scoring';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
@@ -13,7 +14,15 @@ const guidanceStyles: Record<string, string> = {
   dovish: 'border-danger text-danger',
 };
 
-function BankCard({ bank, liveRate }: { bank: CentralBank; liveRate: LiveRate | null | undefined }) {
+function BankCard({
+  bank,
+  liveRate,
+  aiRate,
+}: {
+  bank: CentralBank;
+  liveRate: LiveRate | null | undefined;
+  aiRate: AiBankData | null | undefined;
+}) {
   const history = useMemo(() => buildRateHistory(bank), [bank]);
 
   return (
@@ -36,6 +45,12 @@ function BankCard({ bank, liveRate }: { bank: CentralBank; liveRate: LiveRate | 
             <div className="mt-1 flex items-center gap-1.5 text-xs text-success">
               <Radio className="h-3 w-3" />
               Live: {liveRate.rate.toFixed(2)}% {liveRate.asOf && `(${liveRate.asOf})`}
+            </div>
+          )}
+          {aiRate && (
+            <div className="mt-1 flex items-center gap-1.5 text-xs text-accent" title="Von Claude per Websuche recherchiert, kein offizielles Live-Datenfeed">
+              <Sparkles className="h-3 w-3" />
+              KI-Recherche: {aiRate.rate.toFixed(2)}% · {aiRate.guidance} {aiRate.asOf && `(${aiRate.asOf})`}
             </div>
           )}
         </div>
@@ -85,10 +100,18 @@ function BankCard({ bank, liveRate }: { bank: CentralBank; liveRate: LiveRate | 
 export function CentralBanks() {
   const { banks } = useCentralBanks();
   const liveRates = useLiveRates();
+  const aiRates = useAiRates();
   const liveByBankId: Record<string, LiveRate | null> = {
     boc: liveRates?.boc ?? null,
     ecb: liveRates?.ecb ?? null,
     snb: liveRates?.snb ?? null,
+  };
+  const aiByBankId: Record<string, AiBankData | null> = {
+    fed: aiRates?.fed ?? null,
+    boe: aiRates?.boe ?? null,
+    boj: aiRates?.boj ?? null,
+    rba: aiRates?.rba ?? null,
+    rbnz: aiRates?.rbnz ?? null,
   };
 
   return (
@@ -97,12 +120,13 @@ export function CentralBanks() {
         <h1 className="text-2xl font-bold">Zentralbanken</h1>
         <p className="text-sm text-muted">
           Leitzinsen, Forward Guidance und Wirtschaftsdaten aller 8 Zentralbanken. Für BoC, EZB und SNB zusätzlich live vom offiziellen
-          Datenportal (grüner "Live"-Wert), die restlichen 5 haben keine vergleichbare freie API und bleiben recherchiert.
+          Datenportal (grüner "Live"-Wert). Fed, BoE, BoJ, RBA und RBNZ haben keine vergleichbare freie API — dort recherchiert eine KI
+          (Claude, Websuche) periodisch nach, sichtbar am lila "KI-Recherche"-Wert{aiRates?.enabled === false && ' (aktuell nicht konfiguriert)'}.
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {banks.map((bank) => (
-          <BankCard key={bank.id} bank={bank} liveRate={liveByBankId[bank.id]} />
+          <BankCard key={bank.id} bank={bank} liveRate={liveByBankId[bank.id]} aiRate={aiByBankId[bank.id]} />
         ))}
       </div>
     </div>

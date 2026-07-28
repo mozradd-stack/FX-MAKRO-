@@ -29,12 +29,44 @@ Each fetch is fully isolated (`server/src/app.js`): if one bank's upstream
 response shape doesn't match what's expected, that fetch fails safely to
 `null` — the other two are unaffected, and the affected bank's card just
 shows the researched value without a "Live" badge instead of breaking.
-Fed/BoE/BoJ/RBA/RBNZ have no comparably clean free JSON API (only
-old-style CSV downloads or scraping-shaped interfaces), so those five and
-everything else (forward guidance, CPI, next meeting date) stay a researched
-static snapshot (dated in `centralBanks.ts`). Everything else genuinely live
-— FX spot/historical prices, the economic news feed — is live and
-auto-refreshing.
+Fed/BoE/BoJ/RBA/RBNZ have no comparably clean free JSON API at all (only
+old-style CSV downloads or scraping-shaped interfaces) — see the next
+section for how those five get a semi-live overlay instead. Everything else
+genuinely live — FX spot/historical prices, the economic news feed — is
+live and auto-refreshing.
+
+## AI research for Fed/BoE/BoJ/RBA/RBNZ (optional)
+
+There's no free no-key API for these 5 banks, period — so `/api/ai-rates`
+(`server/src/aiResearch.js`) optionally asks **Claude Haiku 4.5** to look up
+their current policy rate, forward guidance, and next meeting date via the
+`web_search` server tool, once per bank per request, in a single call.
+This is entirely opt-in:
+
+- **No `ANTHROPIC_API_KEY` set** → the route immediately returns
+  `{ ..., enabled: false }` with every bank `null`. Nothing calls out, the
+  app behaves exactly as if this feature didn't exist, and the 5 banks show
+  only their researched static value — same as before this was added.
+- **`ANTHROPIC_API_KEY` set** → the route calls Claude, validates each
+  bank's response in isolation (a bad/missing field for one bank never
+  invalidates the other four, same isolation pattern as `/api/live-rates`),
+  and caches the result in-memory for **7 days**. The `CentralBanks` page
+  shows it as a purple "KI-Recherche" badge — visually distinct from the
+  green "Live" badge — to keep AI-derived data honestly labeled as such
+  rather than passing it off as an official feed.
+
+**Cost**: Haiku 4.5 is the cheapest current Claude model, the prompt covers
+all 5 banks in one request (~$0.01–0.03 per call including web search), and
+the 7-day cache means this fires roughly once a week under normal traffic —
+realistically well under **$1/month**. The one caveat: the cache lives in
+the serverless function's memory, so a Vercel cold start (after a redeploy
+or a long idle period) can reset it early and trigger an extra call sooner
+than 7 days — each call is still only a few cents, so this is a soft cost
+bound, not a real risk, just not a mathematically guaranteed weekly cadence.
+
+**To enable it**: get an API key at [console.anthropic.com](https://console.anthropic.com),
+then in the Vercel project go to **Settings → Environment Variables** and add
+`ANTHROPIC_API_KEY` (value = the key), then redeploy.
 
 ## Why no database
 
@@ -72,7 +104,7 @@ rate-data only, no Fibonacci-style visualization.
 
 ## Structure
 
-- `server/src/app.js` — the entire backend: `/api/news-calendar` (ForexFactory proxy, 15 min cache), `/api/fx-history` (Frankfurter historical proxy, 15 min cache), `/api/fx-latest` (Frankfurter current-rate proxy, 20s cache, powers the Terminal), `/api/live-rates` (BoC/ECB/SNB official policy rates, 10 min cache, each bank isolated)
+- `server/src/app.js` — the entire backend: `/api/news-calendar` (ForexFactory proxy, 15 min cache), `/api/fx-history` (Frankfurter historical proxy, 15 min cache), `/api/fx-latest` (Frankfurter current-rate proxy, 20s cache, powers the Terminal), `/api/live-rates` (BoC/ECB/SNB official policy rates, 10 min cache, each bank isolated), `/api/ai-rates` (Fed/BoE/BoJ/RBA/RBNZ via Claude + web search, 7 day cache, opt-in via `ANTHROPIC_API_KEY` — see `server/src/aiResearch.js`)
 - `server/dev-server.js` — local dev entry (`app.listen`); `api/index.js` — Vercel serverless entry (same Express app, different wrapper)
 - `client/src/data/centralBanks.ts` — the static default dataset (8 central banks, researched rates/meeting dates/CPI trend)
 - `client/src/lib/scoring.ts` — scoring/bias/trajectory/divergence engine, pure functions, no I/O
@@ -96,8 +128,12 @@ Then open **http://localhost:5173**. `Ctrl+C` stops both.
 
 1. On [vercel.com](https://vercel.com), **Add New → Project**, import this
    GitHub repo. Vercel reads `vercel.json` automatically.
-2. Deploy — that's it, no environment variables needed. Every push to the
-   connected branch redeploys automatically.
+2. Deploy — that's it, no environment variables are required. Every push to
+   the connected branch redeploys automatically.
+3. *(Optional)* to enable AI research for Fed/BoE/BoJ/RBA/RBNZ, add an
+   `ANTHROPIC_API_KEY` environment variable (see "AI research" above) and
+   redeploy. Without it the app runs exactly the same, just without that one
+   badge on 5 of the 8 bank cards.
 
 **Worth checking after a deploy**: the dev sandbox this was built in has an
 outbound network policy that blocks all the external APIs used here
