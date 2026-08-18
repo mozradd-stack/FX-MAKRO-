@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ANKUNFT für Unternehmen — Deutschsprachige Talente mit Nachbesetzungsgarantie</title>
+<meta name="description" content="Recruiting für Callcenter, BPOs und Tech-Support in Spanien, Portugal, Zypern und Malta: vorqualifizierte, deutschsprachige Kandidat:innen mit 30-Tage-Nachbesetzungsgarantie." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%233A57FF'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%23FFFFFF' font-family='Arial Black,sans-serif' font-weight='900'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --paper: #F4F5FA;
+    --card: #FFFFFF;
+    --ink: #0B0B0C;
+    --ink-soft: #4A4E5C;
+    --navy: #0F1A3D;
+    --blue: #3A57FF;
+    --yellow: #F5E10B;
+    --pink: #FF4FA3;
+    --lime: #C3FF3D;
+    --line: #0B0B0C;
+    --radius-xl: 24px;
+    --radius-lg: 20px;
+    --radius-md: 14px;
+    --max: 1180px;
+    --shadow-ink: rgba(11,11,12,0.9);
+    color-scheme: light;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } *,*::before,*::after{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; } }
+  body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3,h4{ font-family:"Unbounded","Arial Black",sans-serif; font-weight:700; line-height:1.08; margin:0 0 0.5em; text-wrap:balance; letter-spacing:-0.01em; color:var(--ink); }
+  p{ margin:0 0 1em; color:var(--ink-soft); max-width:64ch; }
+  a{ color:var(--blue); }
+  .mono{ font-family:"Space Mono", ui-monospace, Menlo, monospace; }
+  img,svg{ max-width:100%; display:block; }
+  ::selection{ background:var(--yellow); color:var(--ink); }
+
+  .wrap{ max-width:var(--max); margin:0 auto; padding:0 24px; }
+  section{ padding:88px 0; }
+  .eyebrow{ font-family:"Space Mono",monospace; font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; font-weight:700; display:inline-flex; align-items:center; gap:0.5em; margin-bottom:1em; color:var(--blue); }
+  .eyebrow::before{ content:"—"; }
+  .section-head{ max-width:680px; margin-bottom:44px; }
+  .section-head h2{ font-size:clamp(1.8rem, 1.3rem + 1.8vw, 2.6rem); }
+  .section-head p{ font-size:1.05rem; }
+
+  .pop{ border:2.5px solid var(--line); border-radius:var(--radius-lg); box-shadow:6px 6px 0 var(--shadow-ink); background:var(--card); transition:transform .15s ease, box-shadow .15s ease; }
+  .pop:hover{ transform:translate(-2px,-2px); box-shadow:8px 8px 0 var(--shadow-ink); }
+
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:0.5em; font-family:"Unbounded", sans-serif; font-weight:700; font-size:0.9rem; padding:0.9em 1.6em; border-radius:999px; border:2.5px solid var(--line); cursor:pointer; text-decoration:none; white-space:nowrap; box-shadow:4px 4px 0 var(--shadow-ink); transition:transform .15s ease, box-shadow .15s ease; }
+  .btn:hover{ transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--shadow-ink); }
+  .btn:focus-visible{ outline:3px solid var(--blue); outline-offset:3px; }
+  .btn-yellow{ background:var(--yellow); color:var(--ink); }
+  .btn-navy{ background:var(--navy); color:#fff; border-color:var(--navy); box-shadow:4px 4px 0 rgba(15,26,61,.35); }
+  .btn-navy:hover{ box-shadow:6px 6px 0 rgba(15,26,61,.35); }
+  .btn-ghost{ background:var(--card); color:var(--ink); }
+  .btn-sm{ padding:0.6em 1.15em; font-size:0.8rem; box-shadow:3px 3px 0 var(--shadow-ink); }
+
+  .tag{ font-family:"Space Mono",monospace; font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; font-weight:700; padding:5px 12px; border:2px solid var(--line); border-radius:999px; display:inline-block; width:max-content; background:var(--card); }
+
+  /* Header */
+  header{ position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:2.5px solid var(--line); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:var(--max); margin:0 auto; gap:16px; }
+  .logo{ display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); }
+  .logo-mark{ width:36px; height:36px; border-radius:10px; background:var(--navy); color:var(--yellow); display:flex; align-items:center; justify-content:center; font-family:"Unbounded",sans-serif; font-weight:900; font-size:1.05rem; flex:none; }
+  .logo-text{ font-family:"Unbounded", sans-serif; font-weight:800; font-size:1.15rem; }
+  nav.nav-links ul{ list-style:none; display:flex; gap:4px; margin:0; padding:0; }
+  nav.nav-links a{ color:var(--ink); text-decoration:none; font-size:0.9rem; font-weight:600; padding:8px 14px; border-radius:999px; }
+  nav.nav-links a:hover{ background:var(--card); border:2px solid var(--line); padding:6px 12px; }
+  .nav-actions{ display:flex; align-items:center; gap:10px; }
+  .nav-toggle{ display:none; background:var(--card); border:2px solid var(--line); border-radius:10px; width:40px; height:40px; align-items:center; justify-content:center; cursor:pointer; }
+  @media (max-width: 980px){ .nav-links{ display:none; } .nav-toggle{ display:flex; } }
+  #mobileMenu{ display:none; border-top:2.5px solid var(--line); padding:14px 24px 20px; background:var(--paper); }
+  #mobileMenu ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px; }
+  #mobileMenu a{ font-weight:600; text-decoration:none; color:var(--ink); }
+
+  /* Hero */
+  .hero{ background:var(--navy); color:#fff; border-bottom:2.5px solid var(--line); padding:76px 0 64px; }
+  .hero .wrap{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:center; }
+  @media (max-width:980px){ .hero .wrap{ grid-template-columns:1fr; } }
+  .hero .eyebrow{ color:var(--yellow); }
+  .hero .eyebrow::before{ color:var(--yellow); }
+  .hero h1{ color:#fff; font-size:clamp(2.1rem, 1.5rem + 2.6vw, 3.3rem); }
+  .hero-lede{ font-size:1.1rem; max-width:52ch; color:rgba(255,255,255,.78); }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin:26px 0 8px; }
+  .hero-panel{ background:#fff; color:var(--ink); padding:0; }
+  .hero-panel-top{ padding:22px 24px 0; }
+  .hero-panel-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border-top:2.5px solid var(--line); margin-top:20px; }
+  .hero-panel-grid div{ background:#fff; padding:16px 14px; }
+  .hp-k{ font-family:"Space Mono",monospace; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); margin-bottom:5px; }
+  .hp-v{ font-family:"Unbounded",monospace; font-size:1.25rem; font-weight:800; color:var(--blue); }
+
+  /* pain points */
+  .pain-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  @media (max-width:900px){ .pain-grid{ grid-template-columns:1fr; } }
+  .pain-card{ padding:26px; }
+  .pain-num{ font-family:"Unbounded",monospace; color:var(--blue); font-weight:900; font-size:1.4rem; }
+  .pain-card h4{ font-size:1.05rem; margin:10px 0 6px; }
+  .pain-card p{ font-size:0.92rem; margin:0; }
+
+  /* process */
+  .itinerary{ display:flex; flex-direction:column; }
+  .leg{ display:grid; grid-template-columns:52px 1fr; gap:18px; position:relative; padding-bottom:32px; }
+  .leg:last-child{ padding-bottom:0; }
+  .leg-rail{ display:flex; flex-direction:column; align-items:center; }
+  .leg-dot{ width:36px; height:36px; border-radius:50%; border:2.5px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:"Unbounded",sans-serif; font-weight:800; font-size:0.8rem; flex:none; background:var(--yellow); }
+  .leg-line{ width:2.5px; flex:1; background:var(--line); margin-top:4px; border-radius:2px; }
+  .leg:last-child .leg-line{ display:none; }
+  .leg h4{ font-size:1.05rem; margin-bottom:6px; }
+  .leg p{ font-size:0.92rem; margin:0; }
+
+  /* guarantee + pricing */
+  .guarantee-layout{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:860px){ .guarantee-layout{ grid-template-columns:1fr; } }
+  .guarantee-box{ padding:30px; }
+  .guarantee-box.dark{ background:var(--navy); color:#fff; }
+  .guarantee-box.dark h3, .guarantee-box.dark p{ color:#fff; }
+  .guarantee-box.dark p{ color:rgba(255,255,255,.78); }
+  .replace-scale{ display:flex; gap:8px; margin-top:18px; font-family:"Space Mono",monospace; font-size:0.72rem; text-align:center; }
+  .replace-scale div{ flex:1; padding:12px 6px; border:2px solid rgba(255,255,255,.4); border-radius:10px; }
+  .replace-scale div:nth-child(1){ background:var(--yellow); color:var(--ink); border-color:var(--line); }
+  .price-table{ width:100%; border-collapse:collapse; font-size:0.92rem; }
+  .price-table th, .price-table td{ text-align:left; padding:12px 10px; border-bottom:2px dashed rgba(11,11,12,.15); }
+  .price-table th{ font-family:"Space Mono",monospace; font-size:0.68rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft); }
+  .price-table td:last-child, .price-table th:last-child{ text-align:right; font-family:"Space Mono",monospace; font-weight:700; }
+  .price-table tr:last-child td{ border-bottom:none; }
+
+  /* destinations reused */
+  .dest-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+  @media (max-width:980px){ .dest-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .dest-grid{ grid-template-columns:1fr; } }
+  .dest-card{ padding:22px; display:flex; flex-direction:column; gap:8px; min-height:170px; }
+  .dest-code{ font-family:"Unbounded",monospace; font-size:1.7rem; font-weight:900; color:var(--blue); }
+  .dest-card h4{ font-size:1.05rem; margin:0; }
+  .dest-cities{ font-size:0.78rem; font-weight:600; color:var(--ink-soft); margin-bottom:4px; }
+  .dest-roles{ margin-top:auto; font-size:0.82rem; font-weight:600; border-top:2px dashed rgba(11,11,12,.15); padding-top:10px; color:var(--ink-soft); }
+
+  /* compare */
+  .compare{ display:grid; grid-template-columns:1fr 1fr; gap:0; border-radius:var(--radius-lg); overflow:hidden; }
+  @media (max-width:760px){ .compare{ grid-template-columns:1fr; } }
+  .compare > div{ padding:30px; }
+  .compare-them{ background:var(--card); }
+  .compare-us{ background:var(--navy); color:#fff; }
+  .compare-us h3, .compare-us .compare-row{ color:#fff; }
+  .compare h3{ font-size:1.1rem; margin-bottom:16px; }
+  .compare-row{ display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-top:1px solid rgba(11,11,12,.12); font-size:0.92rem; font-weight:500; }
+  .compare-us .compare-row{ border-top-color:rgba(255,255,255,.16); }
+  .compare-row:first-of-type{ border-top:none; }
+  .compare-row svg{ flex:none; width:17px; height:17px; margin-top:2px; }
+
+  /* testimonial */
+  .quote-card{ padding:30px; max-width:760px; }
+  .quote-card p{ font-family:"Unbounded",sans-serif; font-weight:600; font-size:1.15rem; color:var(--ink); line-height:1.35; }
+  .quote-card cite{ font-style:normal; font-size:0.85rem; font-weight:600; color:var(--ink-soft); }
+
+  /* contact */
+  .contact-layout{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:44px; }
+  @media (max-width:900px){ .contact-layout{ grid-template-columns:1fr; } }
+  .contact-card{ padding:32px; background:var(--card); }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  @media (max-width:520px){ .form-row{ grid-template-columns:1fr; } }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-size:0.8rem; font-weight:700; color:var(--ink); }
+  .field input, .field select, .field textarea{ font-family:inherit; font-size:0.95rem; padding:0.8em 0.95em; border-radius:10px; border:2px solid var(--line); background:var(--paper); color:var(--ink); resize:vertical; }
+  .field input:focus, .field select:focus, .field textarea:focus{ outline:3px solid var(--blue); outline-offset:1px; }
+  .contact-legal{ font-size:0.78rem; color:var(--ink-soft); margin-top:14px; }
+  #form-success{ display:none; padding:20px; border-radius:var(--radius-md); background:var(--lime); font-weight:700; align-items:center; gap:10px; border:2.5px solid var(--line); }
+  #form-success.show{ display:flex; }
+  #contact-form.hide{ display:none; }
+
+  /* footer */
+  footer.site{ background:var(--navy); color:var(--paper); padding:56px 0 0; }
+  footer.site a{ color:rgba(244,245,250,.8); text-decoration:none; font-weight:500; }
+  footer.site a:hover{ color:var(--yellow); }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:32px; padding-bottom:32px; }
+  @media (max-width:760px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
+  .footer-grid h5{ font-family:"Unbounded",sans-serif; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--yellow); margin-bottom:14px; }
+  .footer-grid ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; font-size:0.9rem; }
+  .footer-legal{ font-size:0.78rem; color:rgba(244,245,250,.5); max-width:64ch; margin-top:16px; }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:18px 0; border-top:2px solid rgba(244,245,250,.15); font-size:0.8rem; color:rgba(244,245,250,.55); }
+
+  .reveal{ opacity:0; transform:translateY(14px); transition:opacity .55s ease, transform .55s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">A</span>
+      <span class="logo-text">ANKUNFT</span>
+    </a>
+    <nav class="nav-links" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#prozess">Prozess</a></li>
+        <li><a href="#garantie">Garantie</a></li>
+        <li><a href="#konditionen">Konditionen</a></li>
+        <li><a href="#ziellaender">Talent-Pool</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-ghost btn-sm nav-links" href="bewerber.html">Für Bewerber:innen</a>
+      <a class="btn btn-yellow btn-sm nav-links" href="#kontakt">Erstgespräch anfragen</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobileMenu" aria-label="Mobile Navigation">
+    <ul>
+      <li><a href="#prozess">Prozess</a></li>
+      <li><a href="#garantie">Garantie</a></li>
+      <li><a href="#konditionen">Konditionen</a></li>
+      <li><a href="#ziellaender">Talent-Pool</a></li>
+      <li><a href="bewerber.html">Für Bewerber:innen</a></li>
+      <li><a class="btn btn-yellow btn-sm" href="#kontakt" style="width:max-content;">Erstgespräch anfragen</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <p class="eyebrow">Für Unternehmen</p>
+        <h1>Startklare Talente statt Karteileichen.</h1>
+        <p class="hero-lede">Wir liefern vorqualifizierte, deutschsprachige Kandidat:innen für Ihre Callcenter-, Sales- und Support-Teams in Spanien, Portugal, Zypern und Malta — organisatorisch bereits startklar, mit spürbar höherer Show-up-Rate und einer 30-Tage-Nachbesetzungsgarantie.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-yellow" href="#kontakt">Pilot-Kandidat:in anfragen</a>
+          <a class="btn btn-ghost" href="#konditionen" style="background:transparent; color:#fff; border-color:rgba(255,255,255,.5);">Konditionen ansehen</a>
+        </div>
+      </div>
+      <div class="hero-panel pop reveal">
+        <div class="hero-panel-top">
+          <span class="tag">Kandidat:innen-Profil</span>
+          <h3 style="margin-top:14px; font-size:1.3rem;">Sprachlich geprüft. Motiviert. Startklar.</h3>
+          <p style="font-size:0.9rem;">C1+/Muttersprache Deutsch, aktiver Umzugswille, organisatorisch bereits in Vorbereitung.</p>
+        </div>
+        <div class="hero-panel-grid">
+          <div><div class="hp-k">Nachbesetzung</div><div class="hp-v">30 Tage</div></div>
+          <div><div class="hp-k">Sprachlevel</div><div class="hp-v">C1+</div></div>
+          <div><div class="hp-k">Provision</div><div class="hp-v">1,5–2×</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAIN POINTS -->
+  <section id="pain">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Ihre Ausgangslage</p>
+        <h2>Drei Probleme, die uns HR-Verantwortliche immer wieder nennen.</h2>
+        <p>Chronischer Sprachtalentmangel, hohe Frühfluktuation bei Relocation-Einstellungen und zu viel gebundene HR-Kapazität durch unpassende Bewerbungen.</p>
+      </div>
+      <div class="pain-grid">
+        <div class="pain-card pop reveal">
+          <div class="pain-num mono">01</div>
+          <h4>Chronischer Talentmangel</h4>
+          <p>Offene Stellen bleiben monatelang unbesetzt — mit direktem Umsatzverlust im Kundenservice.</p>
+        </div>
+        <div class="pain-card pop reveal">
+          <div class="pain-num mono">02</div>
+          <h4>Hohe Frühfluktuation</h4>
+          <p>Relocation-Einstellungen springen ab, wenn der Umzug für die Kandidat:innen zu stressig wird — Recruiting- und Onboarding-Kosten wiederholen sich.</p>
+        </div>
+        <div class="pain-card pop reveal">
+          <div class="pain-num mono">03</div>
+          <h4>Aufwändiges Screening</h4>
+          <p>Gebundene HR-Kapazität durch viele unqualifizierte Bewerbungen über anonyme Plattformen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARE -->
+  <section id="warum" style="background:var(--card); border-top:2.5px solid var(--line); border-bottom:2.5px solid var(--line);">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Warum Ankunft</p>
+        <h2>Wir verkaufen keinen Kontakt. Wir liefern Ankunft.</h2>
+        <p>Der Unterschied zu anonymen Plattform-Leads zeigt sich nicht im CV, sondern am ersten Arbeitstag — und in den ersten 90 Tagen danach.</p>
+      </div>
+      <div class="compare pop reveal">
+        <div class="compare-them">
+          <h3>Plattform-Leads</h3>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>Ungeprüfte Profile, niedrige Interview-to-Hire-Rate</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>Show-up-Rate im Ausland unbekannt</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>Kein Nachbetreuungs-Prozess</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>Meist keine Garantie</div>
+        </div>
+        <div class="compare-us">
+          <h3>Ankunft</h3>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Screening &amp; Sprachtest vor jeder Vorstellung</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>Deutlich höhere Show-up-Rate durch organisierten Umzug</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>90 Tage aktive Nachbetreuung senkt Frühfluktuation</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>30-Tage-Nachbesetzungsgarantie</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section id="prozess">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Ablauf</p>
+        <h2>So kommen Sie von der Bedarfsmeldung zur Einstellung.</h2>
+      </div>
+      <div class="itinerary reveal">
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">01</div><div class="leg-line"></div></div><div><h4>Bedarfsklärung</h4><p>Kurzes Gespräch zu Rollenprofil, Sprachanforderung, Zielland und Volumen.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">02</div><div class="leg-line"></div></div><div><h4>Screening &amp; Matching</h4><p>Wir prüfen Sprachlevel und Motivation und gleichen mit passenden Kandidat:innen ab.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">03</div><div class="leg-line"></div></div><div><h4>Vorstellung</h4><p>Sie erhalten ausschließlich vorqualifizierte, startklare Profile — keine Streuverluste.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">04</div><div class="leg-line"></div></div><div><h4>Interview &amp; Zusage</h4><p>Wir bereiten die Kandidat:innen inhaltlich auf Ihr Interview vor.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">05</div><div class="leg-line"></div></div><div><h4>Relocation-Support</h4><p>Wohnraum, Behörden und Ankunft werden parallel organisiert — das senkt Ihr Ausfallrisiko.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">06</div></div><div><h4>90-Tage-Begleitung</h4><p>Regelmäßige Check-ins schützen die Nachbesetzungsgarantie und Ihre Investition.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUARANTEE + PRICING -->
+  <section id="garantie" style="background:var(--card); border-top:2.5px solid var(--line); border-bottom:2.5px solid var(--line);">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow" id="konditionen">Garantie &amp; Konditionen</p>
+        <h2>Der zentrale Vertrauensanker in unserer Zusammenarbeit.</h2>
+      </div>
+      <div class="guarantee-layout">
+        <div class="guarantee-box dark pop reveal">
+          <h3 style="font-size:1.1rem;">Nachbesetzungsgarantie</h3>
+          <p>Kündigt die Kandidatin oder der Kandidat, oder wird ihr/ihm in der Probezeit gekündigt, liefern wir kostenlosen Ersatz innerhalb von 30 Tagen — gestaffelt rückerstattet, wenn ein Ersatz nicht möglich ist.</p>
+          <div class="replace-scale">
+            <div><strong>100%</strong><br>&lt; 30 Tage</div>
+            <div><strong>50%</strong><br>30–60 Tage</div>
+            <div><strong>0%</strong><br>&gt; 60 Tage</div>
+          </div>
+        </div>
+        <div class="pop reveal" style="padding:30px;">
+          <h3 style="font-size:1.1rem;">Provisionsmodell</h3>
+          <table class="price-table">
+            <thead><tr><th>Modell</th><th>Konditionen</th></tr></thead>
+            <tbody>
+              <tr><td>Einzelvermittlung</td><td>1,5–2 Bruttomonatsgehälter</td></tr>
+              <tr><td>Rahmenvertrag (20+/Jahr)</td><td>Pauschale, verhandelbar</td></tr>
+              <tr><td>Pilot-Kandidat:in</td><td>Reduzierte Konditionen</td></tr>
+            </tbody>
+          </table>
+          <p style="font-size:0.85rem; margin-top:16px; margin-bottom:0;">Fällig ausschließlich bei erfolgreicher Einstellung. Der erste Pilot-Kandidat ist unser Türöffner, um die Qualität zu belegen, bevor wir über einen Rahmenvertrag sprechen.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TALENT POOL / DESTINATIONS -->
+  <section id="ziellaender">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Talent-Pool</p>
+        <h2>Vier Hubs, in denen wir lokale Netzwerke wirklich aufgebaut haben.</h2>
+      </div>
+      <div class="dest-grid">
+        <div class="dest-card pop reveal"><div class="dest-code">AGP</div><div><h4>Spanien</h4><div class="dest-cities">Málaga · Barcelona · Valencia · Kanaren</div></div><div class="dest-roles">Customer Support · Sales · Content-Moderation</div></div>
+        <div class="dest-card pop reveal"><div class="dest-code">LIS</div><div><h4>Portugal</h4><div class="dest-cities">Lissabon · Porto</div></div><div class="dest-roles">Support · Backoffice · Junior Tech</div></div>
+        <div class="dest-card pop reveal"><div class="dest-code">LCA</div><div><h4>Zypern</h4><div class="dest-cities">Limassol</div></div><div class="dest-roles">Sales · Account Management · Support</div></div>
+        <div class="dest-card pop reveal"><div class="dest-code">MLA</div><div><h4>Malta</h4><div class="dest-cities">Valletta &amp; Umgebung</div></div><div class="dest-roles">Support · Compliance (Junior)</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section id="stimmen" style="background:var(--card); border-top:2.5px solid var(--line); border-bottom:2.5px solid var(--line);">
+    <div class="wrap">
+      <p class="eyebrow">Aus der Praxis</p>
+      <div class="quote-card pop reveal">
+        <p>„Für uns zählt die Show-up-Rate — und die ist mit Ankunft spürbar höher als über anonyme Plattformen. Die Nachbesetzungsgarantie hat unser Einstellungsrisiko messbar reduziert.“</p>
+        <cite>— Sofia, Talent Acquisition · Lissabon</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="kontakt">
+    <div class="wrap">
+      <div class="contact-layout">
+        <div class="reveal">
+          <p class="eyebrow">Kontakt</p>
+          <h2 style="font-size:clamp(1.6rem,1.3rem+1.2vw,2.1rem);">Fordern Sie Ihre:n ersten Pilot-Kandidat:in an.</h2>
+          <p>Kurzes Erstgespräch zu Rollenprofil, Volumen und Zielland — unverbindlich. Der Pilot-Kandidat läuft zu reduzierten Konditionen.</p>
+        </div>
+        <div class="contact-card pop reveal">
+          <form id="contact-form">
+            <div class="form-row">
+              <div class="field"><label for="f-company">Unternehmen</label><input id="f-company" name="company" type="text" required autocomplete="organization" /></div>
+              <div class="field"><label for="f-name">Ansprechpartner:in</label><input id="f-name" name="name" type="text" required autocomplete="name" /></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label for="f-email">E-Mail</label><input id="f-email" name="email" type="email" required autocomplete="email" /></div>
+              <div class="field">
+                <label for="f-count">Offene Stellen</label>
+                <select id="f-count" name="count" required>
+                  <option value="">Bitte wählen</option>
+                  <option>1–3</option><option>4–10</option><option>10–20</option><option>20+ (Rahmenvertrag)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field" style="grid-column:1 / -1;">
+                <label for="f-country">Zielland / Standort</label>
+                <select id="f-country" name="country" required>
+                  <option value="">Bitte wählen</option>
+                  <option>Spanien (AGP)</option><option>Portugal (LIS)</option><option>Zypern (LCA)</option><option>Malta (MLA)</option><option>Mehrere Standorte</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field" style="grid-column:1 / -1;">
+                <label for="f-message">Nachricht (optional)</label>
+                <textarea id="f-message" name="message" rows="3"></textarea>
+              </div>
+            </div>
+            <button class="btn btn-navy" type="submit" style="width:100%;">Erstgespräch anfragen</button>
+            <p class="contact-legal">Wir sind keine Steuer-, Rechts- oder Finanzberatung. Vermittlungskonditionen gelten laut individuellem Rahmenvertrag.</p>
+          </form>
+          <div id="form-success">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+            Anfrage erhalten — wir melden uns innerhalb von 24 Stunden bei Ihnen.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="logo-text" style="color:var(--yellow);">ANKUNFT</div>
+        <p style="color:rgba(244,245,250,.7); font-size:0.9rem; margin-top:10px;">Recruiting mit Nachbesetzungsgarantie für Callcenter, BPOs und Tech-Support-Teams in Spanien, Portugal, Zypern und Malta.</p>
+      </div>
+      <div><h5>Für Unternehmen</h5><ul><li><a href="#prozess">Prozess</a></li><li><a href="#garantie">Garantie</a></li><li><a href="#konditionen">Konditionen</a></li><li><a href="#kontakt">Kontakt</a></li></ul></div>
+      <div><h5>Mehr</h5><ul><li><a href="bewerber.html">Für Bewerber:innen</a></li><li><a href="index.html">Startseite</a></li><li><a href="#">Impressum</a></li><li><a href="#">Datenschutz</a></li></ul></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="footer-legal">Hinweis: Wir erbringen keine Steuer-, Rechts- oder Finanzberatung, sondern ausschließlich Personalvermittlung und organisatorische Unterstützung. Provisionen werden ausschließlich vom Arbeitgeber getragen, nie von Bewerber:innen (§ 296 SGB III).</p>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Ankunft Talent &amp; Relocation</span>
+      <span class="mono">AGP · LIS · LCA · MLA</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var navToggle = document.getElementById('navToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', function(){
+    var open = mobileMenu.style.display === 'block';
+    mobileMenu.style.display = open ? 'none' : 'block';
+    navToggle.setAttribute('aria-expanded', String(!open));
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ mobileMenu.style.display = 'none'; navToggle.setAttribute('aria-expanded','false'); });
+  });
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.14 });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  var form = document.getElementById('contact-form');
+  var success = document.getElementById('form-success');
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    form.classList.add('hide');
+    success.classList.add('show');
+  });
+</script>
+</body>
+</html>

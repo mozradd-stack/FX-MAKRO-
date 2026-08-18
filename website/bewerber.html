@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ANKUNFT für Bewerber:innen — Gap-Year-Jobs & Sorglos-Umzug nach Spanien, Portugal, Zypern & Malta</title>
+<meta name="description" content="Kostenlose Jobvermittlung für deutschsprachige Gap-Year-Talente nach Spanien, Portugal, Zypern & Malta – plus ein optionales VIP-Sorglos-Paket für Behörden, Wohnung und Ankunft." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23F5E10B'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='%230B0B0C' font-family='Arial Black,sans-serif' font-weight='900'%3EA%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800;900&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  /* ===== Tokens — single committed loud theme, no dark mode (brand relies on the color-blocking) ===== */
+  :root{
+    --paper: #FFF7E4;
+    --card: #FFFFFF;
+    --ink: #0B0B0C;
+    --ink-soft: #4A463C;
+    --yellow: #F5E10B;
+    --pink: #FF4FA3;
+    --blue: #3A57FF;
+    --lime: #C3FF3D;
+    --purple: #8C6BFF;
+    --orange: #FF7A3D;
+    --line: #0B0B0C;
+    --radius-xl: 28px;
+    --radius-lg: 22px;
+    --radius-md: 16px;
+    --radius-pill: 999px;
+    --max: 1200px;
+    --shadow-ink: rgba(11,11,12,0.94);
+    color-scheme: light;
+  }
+  *,*::before,*::after{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *,*::before,*::after{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+  }
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Plus Jakarta Sans", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:"Unbounded", "Arial Black", sans-serif;
+    font-weight:800;
+    line-height:1.04;
+    margin:0 0 0.5em;
+    text-wrap:balance;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+  p{ margin:0 0 1em; color:var(--ink-soft); max-width:60ch; }
+  a{ color:var(--ink); }
+  .mono{ font-family:"Space Mono", ui-monospace, Menlo, monospace; }
+  img,svg{ max-width:100%; display:block; }
+  ::selection{ background:var(--pink); color:#fff; }
+
+  .wrap{ max-width:var(--max); margin:0 auto; padding:0 24px; }
+  section{ padding:88px 0; position:relative; }
+  .eyebrow{
+    font-family:"Space Mono", monospace; font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase;
+    font-weight:700; display:inline-flex; align-items:center; gap:0.5em; margin-bottom:1em; color:var(--ink);
+  }
+  .eyebrow::before{ content:"✦"; color:var(--pink); }
+  .section-head{ max-width:680px; margin-bottom:44px; }
+  .section-head h2{ font-size:clamp(1.9rem, 1.4rem + 2vw, 3rem); }
+  .section-head p{ font-size:1.05rem; }
+
+  /* mark / highlighter */
+  .mark{ position:relative; white-space:nowrap; display:inline-block; }
+  .mark::after{ content:""; position:absolute; left:-3%; right:-3%; bottom:0.05em; height:0.36em; background:var(--pink); z-index:-1; transform:skewX(-8deg); }
+  .mark.lime::after{ background:var(--lime); }
+  .mark.blue::after{ background:var(--blue); }
+  .mark.blue{ color:#fff; }
+
+  /* ===== Neo-brutalist pop cards / buttons ===== */
+  .pop{
+    border:3px solid var(--line);
+    border-radius:var(--radius-lg);
+    box-shadow:7px 7px 0 var(--shadow-ink);
+    background:var(--card);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .pop:hover{ transform:translate(-3px,-3px); box-shadow:10px 10px 0 var(--shadow-ink); }
+
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:0.5em;
+    font-family:"Unbounded", sans-serif; font-weight:700; font-size:0.92rem;
+    padding:0.95em 1.7em; border-radius:var(--radius-pill); border:3px solid var(--line);
+    cursor:pointer; text-decoration:none; white-space:nowrap;
+    box-shadow:5px 5px 0 var(--shadow-ink);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{ transform:translate(-2px,-2px); box-shadow:7px 7px 0 var(--shadow-ink); }
+  .btn:active{ transform:translate(1px,1px); box-shadow:2px 2px 0 var(--shadow-ink); }
+  .btn:focus-visible{ outline:3px solid var(--blue); outline-offset:3px; }
+  .btn-pink{ background:var(--pink); color:#fff; }
+  .btn-yellow{ background:var(--yellow); color:var(--ink); }
+  .btn-ink{ background:var(--ink); color:var(--yellow); }
+  .btn-ghost{ background:var(--card); color:var(--ink); }
+  .btn-sm{ padding:0.65em 1.2em; font-size:0.82rem; box-shadow:3px 3px 0 var(--shadow-ink); }
+  .btn-sm:hover{ box-shadow:5px 5px 0 var(--shadow-ink); }
+
+  .sticker{
+    display:inline-flex; align-items:center; gap:6px; background:var(--lime);
+    border:2.5px solid var(--line); border-radius:var(--radius-pill); padding:7px 15px;
+    font-family:"Space Mono",monospace; font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.04em;
+    box-shadow:3px 3px 0 var(--shadow-ink);
+  }
+  .rot-l{ transform:rotate(-4deg); }
+  .rot-r{ transform:rotate(3deg); }
+
+  /* ===== Header ===== */
+  header{ position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:3px solid var(--line); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; padding:14px 24px; max-width:var(--max); margin:0 auto; gap:16px; }
+  .logo{ display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--ink); }
+  .logo-mark{ width:38px; height:38px; border-radius:11px; background:var(--yellow); border:2.5px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:"Unbounded",sans-serif; font-weight:900; font-size:1.1rem; flex:none; transform:rotate(-6deg); }
+  .logo-text{ font-family:"Unbounded", sans-serif; font-weight:800; font-size:1.2rem; }
+  nav.nav-links ul{ list-style:none; display:flex; gap:6px; margin:0; padding:0; }
+  nav.nav-links a{ color:var(--ink); text-decoration:none; font-size:0.9rem; font-weight:700; padding:8px 14px; border-radius:var(--radius-pill); }
+  nav.nav-links a:hover{ background:var(--card); border:2px solid var(--line); padding:6px 12px; }
+  .nav-actions{ display:flex; align-items:center; gap:10px; }
+  .nav-toggle{ display:none; background:var(--card); border:2.5px solid var(--line); border-radius:10px; width:42px; height:42px; align-items:center; justify-content:center; cursor:pointer; color:var(--ink); }
+  @media (max-width: 940px){ .nav-links{ display:none; } .nav-toggle{ display:flex; } }
+  #mobileMenu{ display:none; border-top:3px solid var(--line); padding:14px 24px 22px; background:var(--paper); }
+  #mobileMenu ul{ list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:12px; }
+  #mobileMenu a{ font-weight:700; text-decoration:none; color:var(--ink); }
+
+  /* ===== Marquee ===== */
+  .marquee{ overflow:hidden; white-space:nowrap; background:var(--ink); color:var(--yellow); border-bottom:3px solid var(--line); padding:12px 0; }
+  .marquee-track{ display:inline-block; animation:marquee 26s linear infinite; }
+  @keyframes marquee{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  .marquee span{ font-family:"Unbounded",sans-serif; font-weight:700; font-size:0.95rem; text-transform:uppercase; letter-spacing:0.03em; padding:0 22px; }
+  .marquee span.pink{ color:var(--pink); }
+  .marquee span.lime{ color:var(--lime); }
+  @media (prefers-reduced-motion: reduce){ .marquee-track{ animation:none; } .marquee{ overflow-x:auto; } }
+
+  /* ===== Hero ===== */
+  .hero{ background:var(--yellow); border-bottom:3px solid var(--line); overflow:hidden; padding:72px 0 60px; }
+  .hero .wrap{ display:grid; grid-template-columns:1.1fr 0.9fr; gap:48px; align-items:center; }
+  @media (max-width:980px){ .hero .wrap{ grid-template-columns:1fr; } }
+  .hero h1{ font-size:clamp(2.3rem, 1.6rem + 3.2vw, 3.9rem); }
+  .hero-lede{ font-size:1.12rem; max-width:50ch; color:var(--ink); opacity:.82; }
+  .hero-stickers{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom:22px; }
+  .hero-ctas{ display:flex; gap:14px; flex-wrap:wrap; margin:26px 0 18px; }
+  .hero-note{ font-size:0.86rem; font-weight:600; }
+
+  .hero-card{ background:var(--card); border-radius:var(--radius-xl); padding:0; transform:rotate(2deg); }
+  .hero-card-top{ display:flex; justify-content:space-between; align-items:center; padding:20px 24px 0; }
+  .hero-card-route{ display:flex; align-items:center; gap:12px; padding:14px 24px 18px; }
+  .hero-card-city{ font-family:"Unbounded",sans-serif; font-weight:800; font-size:1.55rem; }
+  .hero-card-code{ font-family:"Space Mono",monospace; font-size:0.72rem; color:var(--ink-soft); }
+  .hero-plane{ width:24px; height:24px; color:var(--pink); flex:none; }
+  .hero-card-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:2px; background:var(--line); border-top:3px solid var(--line); }
+  .hero-card-grid div{ background:var(--card); padding:14px 20px; font-family:"Space Mono",monospace; }
+  .hero-card-k{ font-size:0.62rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); margin-bottom:4px; }
+  .hero-card-v{ font-size:0.95rem; font-weight:700; }
+  .hero-card-cta{ display:flex; justify-content:space-between; align-items:center; padding:16px 24px; background:var(--ink); border-radius:0 0 calc(var(--radius-xl) - 3px) calc(var(--radius-xl) - 3px); }
+  .hero-card-cta span{ color:var(--yellow); font-family:"Unbounded",sans-serif; font-weight:700; font-size:0.85rem; }
+
+  /* ===== Stats ===== */
+  .stats{ padding:48px 0; border-bottom:3px solid var(--line); background:var(--card); }
+  .stats .wrap{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  @media (max-width:820px){ .stats .wrap{ grid-template-columns:repeat(2,1fr); } }
+  .stat b{ display:block; font-family:"Unbounded",monospace; font-size:clamp(1.7rem,1.3rem + 1.1vw,2.4rem); color:var(--pink); font-variant-numeric:tabular-nums; }
+  .stat span{ font-size:0.85rem; color:var(--ink-soft); font-weight:600; }
+
+  /* ===== Compare ===== */
+  .compare{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+  @media (max-width:760px){ .compare{ grid-template-columns:1fr; } }
+  .compare > div{ padding:30px; }
+  .compare-them{ background:var(--card); }
+  .compare-us{ background:var(--lime); }
+  .compare h3{ font-size:1.15rem; margin-bottom:16px; }
+  .compare-row{ display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-top:2px dashed rgba(11,11,12,.18); font-size:0.93rem; font-weight:600; }
+  .compare-row:first-of-type{ border-top:none; }
+  .compare-row svg{ flex:none; width:18px; height:18px; margin-top:2px; }
+
+  /* ===== Paths ===== */
+  .paths{ display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+  @media (max-width:820px){ .paths{ grid-template-columns:1fr; } }
+  .path-card{ padding:32px; display:flex; flex-direction:column; }
+  .path-a{ background:var(--card); }
+  .path-b{ background:var(--pink); color:#fff; }
+  .path-b h3, .path-b p{ color:#fff; }
+  .path-b .path-list li{ color:#fff; }
+  .path-tag{ font-family:"Space Mono",monospace; font-size:0.7rem; letter-spacing:0.08em; text-transform:uppercase; padding:6px 12px; border:2.5px solid var(--line); border-radius:var(--radius-pill); display:inline-block; width:max-content; margin-bottom:16px; background:var(--card); color:var(--ink); }
+  .path-card h3{ font-size:1.5rem; }
+  .path-list{ list-style:none; margin:16px 0 26px; padding:0; display:flex; flex-direction:column; gap:10px; }
+  .path-list li{ display:flex; gap:10px; align-items:flex-start; font-size:0.94rem; font-weight:600; color:var(--ink); }
+  .path-list svg{ flex:none; width:16px; height:16px; margin-top:3px; }
+  .path-card .btn{ margin-top:auto; align-self:flex-start; }
+
+  /* ===== Feature grid ===== */
+  .feature-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  @media (max-width:900px){ .feature-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:600px){ .feature-grid{ grid-template-columns:1fr; } }
+  .feature{ padding:26px; }
+  .feature-icon{ width:44px; height:44px; border-radius:12px; border:2.5px solid var(--line); display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+  .feature-icon svg{ width:22px; height:22px; }
+  .feature:nth-child(6n+1) .feature-icon{ background:var(--yellow); }
+  .feature:nth-child(6n+2) .feature-icon{ background:var(--pink); color:#fff; }
+  .feature:nth-child(6n+3) .feature-icon{ background:var(--blue); color:#fff; }
+  .feature:nth-child(6n+4) .feature-icon{ background:var(--lime); }
+  .feature:nth-child(6n+5) .feature-icon{ background:var(--purple); color:#fff; }
+  .feature:nth-child(6n+6) .feature-icon{ background:var(--orange); }
+  .feature h4{ font-size:1.05rem; margin-bottom:6px; font-family:"Unbounded",sans-serif; }
+  .feature p{ font-size:0.9rem; margin:0; }
+
+  /* ===== Destinations ===== */
+  .dest-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+  @media (max-width:980px){ .dest-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .dest-grid{ grid-template-columns:1fr; } }
+  .dest-card{ padding:24px; display:flex; flex-direction:column; gap:8px; min-height:200px; }
+  .dest-card:nth-child(1){ background:var(--lime); }
+  .dest-card:nth-child(2){ background:var(--pink); color:#fff; }
+  .dest-card:nth-child(3){ background:var(--blue); color:#fff; }
+  .dest-card:nth-child(4){ background:var(--yellow); }
+  .dest-card:nth-child(2) h4, .dest-card:nth-child(2) .dest-roles, .dest-card:nth-child(2) .dest-cities,
+  .dest-card:nth-child(3) h4, .dest-card:nth-child(3) .dest-roles, .dest-card:nth-child(3) .dest-cities{ color:#fff; }
+  .dest-code{ font-family:"Unbounded",monospace; font-size:2rem; font-weight:900; letter-spacing:0.01em; }
+  .dest-card h4{ font-size:1.15rem; margin:0; }
+  .dest-cities{ font-size:0.8rem; font-weight:700; opacity:.85; margin-bottom:4px; }
+  .dest-roles{ margin-top:auto; font-size:0.84rem; font-weight:600; border-top:2px dashed rgba(11,11,12,.25); padding-top:10px; }
+
+  /* ===== Parents ===== */
+  .parents{ background:var(--purple); border-top:3px solid var(--line); border-bottom:3px solid var(--line); }
+  .parents h2, .parents .eyebrow{ color:#fff; }
+  .parents .eyebrow::before{ color:var(--yellow); }
+  .parents-layout{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:44px; align-items:start; }
+  @media (max-width:900px){ .parents-layout{ grid-template-columns:1fr; } }
+  .parents-intro p{ color:#fff; opacity:.9; }
+  .parent-quote{ background:var(--yellow); padding:24px; margin-bottom:18px; transform:rotate(-1.5deg); }
+  .parent-quote p{ font-family:"Unbounded",sans-serif; font-weight:700; font-size:1.02rem; color:var(--ink); margin-bottom:10px; }
+  .parent-quote cite{ font-style:normal; font-size:0.8rem; font-weight:600; color:var(--ink-soft); }
+  details.faq{ background:var(--card); border-radius:var(--radius-md); margin-bottom:12px; overflow:hidden; }
+  details.faq summary{ cursor:pointer; list-style:none; padding:18px 20px; display:flex; justify-content:space-between; align-items:center; gap:16px; font-weight:700; font-size:0.96rem; }
+  details.faq summary::-webkit-details-marker{ display:none; }
+  details.faq summary::after{ content:"+"; font-family:"Space Mono",monospace; font-size:1.3rem; color:var(--pink); flex:none; transition:transform .2s ease; }
+  details.faq[open] summary::after{ transform:rotate(45deg); }
+  details.faq .faq-body{ padding:0 20px 20px; font-size:0.92rem; color:var(--ink-soft); }
+
+  /* ===== Process ===== */
+  .itinerary{ display:flex; flex-direction:column; }
+  .leg{ display:grid; grid-template-columns:56px 1fr; gap:18px; position:relative; padding-bottom:34px; }
+  .leg:last-child{ padding-bottom:0; }
+  .leg-rail{ display:flex; flex-direction:column; align-items:center; }
+  .leg-dot{ width:38px; height:38px; border-radius:50%; border:3px solid var(--line); display:flex; align-items:center; justify-content:center; font-family:"Unbounded",sans-serif; font-weight:800; font-size:0.85rem; flex:none; }
+  .leg:nth-child(7n+1) .leg-dot{ background:var(--yellow); }
+  .leg:nth-child(7n+2) .leg-dot{ background:var(--pink); color:#fff; }
+  .leg:nth-child(7n+3) .leg-dot{ background:var(--blue); color:#fff; }
+  .leg:nth-child(7n+4) .leg-dot{ background:var(--lime); }
+  .leg:nth-child(7n+5) .leg-dot{ background:var(--purple); color:#fff; }
+  .leg:nth-child(7n+6) .leg-dot{ background:var(--orange); }
+  .leg:nth-child(7n+7) .leg-dot{ background:var(--yellow); }
+  .leg-line{ width:3px; flex:1; background:var(--line); margin-top:4px; border-radius:2px; }
+  .leg:last-child .leg-line{ display:none; }
+  .leg h4{ font-size:1.1rem; margin-bottom:6px; }
+  .leg p{ font-size:0.93rem; margin:0; }
+
+  /* ===== Pricing ===== */
+  .pricing{ display:grid; grid-template-columns:1fr 1fr; gap:26px; }
+  @media (max-width:820px){ .pricing{ grid-template-columns:1fr; } }
+  .price-card{ padding:32px; display:flex; flex-direction:column; }
+  .price-card h3{ font-size:1.25rem; }
+  .price-amount{ font-family:"Unbounded",monospace; font-size:2.5rem; font-weight:900; margin:14px 0 4px; font-variant-numeric:tabular-nums; }
+  .price-amount small{ font-size:0.85rem; font-weight:600; color:var(--ink-soft); }
+  .price-sub{ font-size:0.86rem; color:var(--ink-soft); font-weight:600; margin-bottom:22px; }
+  .price-card.highlight{ background:var(--yellow); }
+  hr.dash{ border:none; border-top:2.5px dashed var(--line); margin:0 0 20px; }
+
+  /* ===== Testimonials ===== */
+  .testi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+  @media (max-width:900px){ .testi-grid{ grid-template-columns:1fr; } }
+  .testi{ padding:24px; display:flex; flex-direction:column; gap:14px; }
+  .testi:nth-child(1){ background:var(--lime); }
+  .testi:nth-child(2){ background:var(--pink); color:#fff; }
+  .testi:nth-child(3){ background:var(--blue); color:#fff; }
+  .testi:nth-child(2) footer, .testi:nth-child(3) footer{ color:rgba(255,255,255,.85); }
+  .testi p{ font-family:"Unbounded",sans-serif; font-weight:600; font-size:1rem; margin:0; line-height:1.3; }
+  .testi footer{ display:flex; align-items:center; gap:10px; font-size:0.8rem; font-weight:700; color:var(--ink-soft); }
+  .testi-avatar{ width:32px; height:32px; border-radius:50%; background:var(--ink); color:var(--yellow); display:flex; align-items:center; justify-content:center; font-family:"Space Mono",monospace; font-weight:700; font-size:0.78rem; flex:none; border:2px solid var(--line); }
+
+  /* ===== Contact ===== */
+  .contact-layout{ display:grid; grid-template-columns:0.9fr 1.1fr; gap:44px; }
+  @media (max-width:900px){ .contact-layout{ grid-template-columns:1fr; } }
+  .contact-card{ padding:32px; background:var(--card); }
+  .form-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
+  @media (max-width:520px){ .form-row{ grid-template-columns:1fr; } }
+  .field{ display:flex; flex-direction:column; gap:6px; }
+  .field label{ font-size:0.8rem; font-weight:700; color:var(--ink); }
+  .field input, .field select{
+    font-family:inherit; font-size:0.95rem; padding:0.8em 0.95em; border-radius:12px;
+    border:2.5px solid var(--line); background:var(--paper); color:var(--ink);
+  }
+  .field input:focus, .field select:focus{ outline:3px solid var(--blue); outline-offset:1px; }
+  .contact-legal{ font-size:0.78rem; color:var(--ink-soft); margin-top:14px; }
+  #form-success{ display:none; padding:20px; border-radius:var(--radius-md); background:var(--lime); font-weight:700; align-items:center; gap:10px; border:3px solid var(--line); }
+  #form-success.show{ display:flex; }
+  #contact-form.hide{ display:none; }
+  .contact-side .codes-strip{ margin-top:18px; display:flex; gap:10px; flex-wrap:wrap; }
+
+  /* ===== Footer ===== */
+  footer.site{ background:var(--ink); color:var(--paper); padding:60px 0 0; }
+  footer.site a{ color:rgba(255,247,228,.8); text-decoration:none; font-weight:600; }
+  footer.site a:hover{ color:var(--yellow); }
+  .footer-grid{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:32px; padding-bottom:36px; }
+  @media (max-width:760px){ .footer-grid{ grid-template-columns:1fr 1fr; } }
+  .footer-grid .wrap{ padding:0 24px; }
+  .footer-grid h5{ font-family:"Unbounded",sans-serif; font-size:0.72rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--yellow); margin-bottom:14px; }
+  .footer-grid ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:10px; font-size:0.9rem; }
+  .footer-legal{ font-size:0.78rem; color:rgba(255,247,228,.55); max-width:60ch; margin-top:16px; }
+  .footer-bottom{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:20px 0; border-top:3px solid rgba(255,247,228,.2); font-size:0.8rem; color:rgba(255,247,228,.6); }
+
+  .reveal{ opacity:0; transform:translateY(16px); transition:opacity .55s ease, transform .55s ease; }
+  .reveal.in{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1; transform:none; } }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="logo" href="index.html">
+      <span class="logo-mark">A</span>
+      <span class="logo-text">ANKUNFT</span>
+    </a>
+    <nav class="nav-links" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#usp">Warum wir</a></li>
+        <li><a href="#eltern">Für Eltern</a></li>
+        <li><a href="#ablauf">Ablauf</a></li>
+        <li><a href="#preise">Preise</a></li>
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <a class="btn btn-ghost btn-sm nav-links" href="unternehmen.html">Für Unternehmen</a>
+      <a class="btn btn-pink btn-sm nav-links" href="#kontakt">Erstgespräch buchen</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </div>
+  <nav id="mobileMenu" aria-label="Mobile Navigation">
+    <ul>
+      <li><a href="#usp">Warum wir</a></li>
+      <li><a href="#eltern">Für Eltern</a></li>
+      <li><a href="#ablauf">Ablauf</a></li>
+      <li><a href="#preise">Preise</a></li>
+      <li><a href="unternehmen.html">Für Unternehmen</a></li>
+      <li><a class="btn btn-pink btn-sm" href="#kontakt" style="width:max-content;">Erstgespräch buchen</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span>0&nbsp;€ JOBVERMITTLUNG</span><span class="pink">✦</span>
+    <span>SPANIEN</span><span class="lime">✦</span>
+    <span>PORTUGAL</span><span class="pink">✦</span>
+    <span>ZYPERN</span><span class="lime">✦</span>
+    <span>MALTA</span><span class="pink">✦</span>
+    <span>90 TAGE SUPPORT</span><span class="lime">✦</span>
+    <span>0&nbsp;€ JOBVERMITTLUNG</span><span class="pink">✦</span>
+    <span>SPANIEN</span><span class="lime">✦</span>
+    <span>PORTUGAL</span><span class="pink">✦</span>
+    <span>ZYPERN</span><span class="lime">✦</span>
+    <span>MALTA</span><span class="pink">✦</span>
+    <span>90 TAGE SUPPORT</span><span class="lime">✦</span>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero" style="border-bottom:3px solid var(--line);">
+    <div class="wrap">
+      <div>
+        <div class="hero-stickers">
+          <span class="sticker rot-l">✈️ Gap Year</span>
+          <span class="sticker rot-r" style="background:var(--pink); color:#fff;">100% kostenlos</span>
+        </div>
+        <h1>Dein erster Job im Ausland — <span class="mark">organisiert</span>, nicht riskiert.</h1>
+        <p class="hero-lede">Wir vermitteln dir kostenlos einen Job bei geprüften Arbeitgebern in Spanien, Portugal, Zypern oder Malta. Kein Bock auf Behörden-Chaos? Unser VIP-Sorglos-Paket übernimmt Wohnung, Ankunft und Notfall-Support — zahlbar aus deinem Gehalt.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-pink" href="#kontakt">Job finden — kostenlos</a>
+          <a class="btn btn-ghost" href="#vip">VIP-Paket ansehen</a>
+        </div>
+        <div class="hero-note">✅ Bewerber zahlen 0 € — Vermittlung übernimmt der Arbeitgeber</div>
+      </div>
+
+      <div class="hero-card pop reveal">
+        <div class="hero-card-top">
+          <span class="mono" style="font-size:.68rem; font-weight:700;">BOARDING PASS · ANKUNFT</span>
+          <span class="mono" style="font-size:.66rem; background:var(--lime); border:2px solid var(--line); padding:3px 8px; border-radius:999px; font-weight:700;">BESTÄTIGT</span>
+        </div>
+        <div class="hero-card-route">
+          <div><div class="hero-card-city">Zuhause</div><div class="hero-card-code">ORIGIN</div></div>
+          <svg class="hero-plane" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1 4 1v-1.5L13 19v-5.5z"/></svg>
+          <div><div class="hero-card-city">Málaga</div><div class="hero-card-code">AGP</div></div>
+        </div>
+        <div class="hero-card-grid">
+          <div><div class="hero-card-k">Rolle</div><div class="hero-card-v">Customer Support</div></div>
+          <div><div class="hero-card-k">Gehalt</div><div class="hero-card-v">~1.600 €/Mon.</div></div>
+          <div><div class="hero-card-k">Sprache</div><div class="hero-card-v">Deutsch C1+</div></div>
+          <div><div class="hero-card-k">Gate</div><div class="hero-card-v">Call, 20 Min.</div></div>
+        </div>
+        <div class="hero-card-cta"><span>Ticket-Nr. AKT-2026-GAP</span><span>→</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="wrap">
+      <div class="stat"><b class="mono" data-count="4">0</b><span>Ziel-Hubs: Spanien, Portugal, Zypern, Malta</span></div>
+      <div class="stat"><b class="mono" data-count="0">0&nbsp;€</b><span>Kosten für Bewerber bei der Jobsuche</span></div>
+      <div class="stat"><b class="mono" data-count="90">0</b><span>Tage Nachbetreuung vor Ort</span></div>
+      <div class="stat"><b class="mono" data-count="30">0</b><span>Tage Nachbesetzungsgarantie für Arbeitgeber</span></div>
+    </div>
+  </section>
+
+  <!-- USP -->
+  <section id="usp">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Warum Ankunft</p>
+        <h2>Andere verkaufen <span class="mark">Kontakt.</span> Wir liefern <span class="mark lime">Ankunft.</span></h2>
+        <p>Eine Jobplattform stellt dein Profil online und wartet. Wir screenen, bereiten vor, organisieren den Umzug — und sind noch da, wenn am ersten Arbeitstag mal was schiefgeht.</p>
+      </div>
+      <div class="compare pop reveal" style="box-shadow:7px 7px 0 var(--shadow-ink); border-radius:var(--radius-lg); overflow:hidden; border:3px solid var(--line);">
+        <div class="compare-them">
+          <h3>😴 Reine Jobplattform</h3>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>Profil hochladen und abwarten</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>Viele springen ab, weil der Umzug stresst</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>Kein Follow-up nach der Einstellung</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M6 18L18 6M6 6l12 12"/></svg>Meist keine Garantie</div>
+        </div>
+        <div class="compare-us">
+          <h3>🚀 Ankunft</h3>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Wir screenen &amp; bereiten aktiv aufs Interview vor</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Höhere Show-up-Rate, weil wir den Umzug mitorganisieren</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>90 Tage Nachbetreuung senkt Frühfluktuation</div>
+          <div class="compare-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Nachbesetzungsgarantie innerhalb von 30 Tagen</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TWO PATHS -->
+  <section id="bewerber">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Für Bewerber</p>
+        <h2>Zwei Wege. Du entscheidest, wie viel Unterstützung du brauchst.</h2>
+        <p>Die Jobvermittlung ist immer kostenlos. Das VIP-Paket ist freiwillig — für alle, die Bürokratie und Wohnungssuche nicht allein stemmen wollen.</p>
+      </div>
+      <div class="paths">
+        <div class="path-card pop path-a reveal">
+          <span class="path-tag mono">Pfad A · Do-it-yourself</span>
+          <h3>Job finden</h3>
+          <p>Für alle mit Auslandserfahrung oder klarem Plan, die nur den richtigen Job brauchen.</p>
+          <ul class="path-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Zugang zu geprüften Stellen</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>CV-Check &amp; Interview-Prep</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>0 € — dauerhaft kostenlos</li>
+          </ul>
+          <a class="btn btn-yellow" href="#kontakt">Erstgespräch vereinbaren</a>
+        </div>
+        <div class="path-card pop path-b reveal" id="vip">
+          <span class="path-tag mono">Pfad B · VIP Sorglos-Paket</span>
+          <h3>Job finden + sorgenfrei ankommen</h3>
+          <p style="color:rgba(255,255,255,.9);">Für alle, die den kompletten Umzug in erfahrene Hände geben wollen — Ratenzahlung ab dem ersten Gehalt.</p>
+          <ul class="path-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Alles aus Pfad A</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Behörden, Wohnung, Flughafen-Empfang</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Zahlbar in 3 Raten aus dem Gehalt</li>
+          </ul>
+          <a class="btn btn-ink" href="#kontakt">VIP-Paket sichern</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIP FEATURES -->
+  <section id="vip-features">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Das VIP-Paket im Detail</p>
+        <h2>Sechs Bausteine, die aus einem Umzug eine <span class="mark">Ankunft</span> machen.</h2>
+      </div>
+      <div class="feature-grid">
+        <div class="feature pop reveal">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 12h6M9 16h6M9 8h6M5 4h14v16H5z"/></svg></div>
+          <h4>Behördenservice</h4>
+          <p>Termine &amp; Begleitung für NIE/NIF-Nummer, Sozialversicherung, Bankkonto.</p>
+        </div>
+        <div class="feature pop reveal">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg></div>
+          <h4>Wohnraum-Vermittlung</h4>
+          <p>Kuratierte WG-Zimmer aus geprüftem Netzwerk, mit Video-Erstbesichtigung.</p>
+        </div>
+        <div class="feature pop reveal">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2.5 1.5V22l4-1 4 1v-1.5L13 19v-5.5z"/></svg></div>
+          <h4>Flughafen-Empfang</h4>
+          <p>Abholung am Ankunftstag, Schlüsselübergabe, kurze Einweisung vor Ort.</p>
+        </div>
+        <div class="feature pop reveal">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 20s-7-4.5-9.5-9C.5 6.5 3 3 6.5 3 9 3 11 5 12 6c1-1 3-3 5.5-3C21 3 23.5 6.5 21.5 11 19 15.5 12 20 12 20z"/></svg></div>
+          <h4>Notfall-Support</h4>
+          <p>WhatsApp-Hotline für 90 Tage — Bürozeiten plus Notfallerreichbarkeit.</p>
+        </div>
+        <div class="feature pop reveal">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3 2.7-5 6-5s6 2 6 5M15 20c0-2.2 1.6-4 4.5-4"/></svg></div>
+          <h4>Community</h4>
+          <p>Anbindung an lokale Auswanderer-Gruppen und Stammtische.</p>
+        </div>
+        <div class="feature pop reveal">
+          <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 4h16v12H7l-3 3z"/></svg></div>
+          <h4>Eltern-Update</h4>
+          <p>Optionaler Kurzbericht nach der Ankunft: „Gut angekommen.“</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTINATIONS -->
+  <section id="ziellaender">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Ziel-Hubs</p>
+        <h2>Vier Länder, in denen dein Deutsch bares Geld wert ist.</h2>
+        <p>Fokus statt Streuung: Wir bauen unsere lokalen Netzwerke in wenigen Hubs wirklich tief auf.</p>
+      </div>
+      <div class="dest-grid">
+        <div class="dest-card pop reveal">
+          <div class="dest-code">AGP</div>
+          <div><h4>Spanien</h4><div class="dest-cities">Málaga · Barcelona · Valencia · Kanaren</div></div>
+          <div class="dest-roles">Customer Support · Sales · Content-Moderation</div>
+        </div>
+        <div class="dest-card pop reveal">
+          <div class="dest-code">LIS</div>
+          <div><h4>Portugal</h4><div class="dest-cities">Lissabon · Porto</div></div>
+          <div class="dest-roles">Support · Backoffice · Junior Tech</div>
+        </div>
+        <div class="dest-card pop reveal">
+          <div class="dest-code">LCA</div>
+          <div><h4>Zypern</h4><div class="dest-cities">Limassol</div></div>
+          <div class="dest-roles">Sales · Account Management · Support</div>
+        </div>
+        <div class="dest-card pop reveal">
+          <div class="dest-code">MLA</div>
+          <div><h4>Malta</h4><div class="dest-cities">Valletta &amp; Umgebung</div></div>
+          <div class="dest-roles">Support · Compliance (Junior)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARENTS -->
+  <section id="eltern" class="parents">
+    <div class="wrap">
+      <div class="parents-layout">
+        <div class="reveal parents-intro">
+          <p class="eyebrow">Für Eltern</p>
+          <h2 style="font-size:clamp(1.7rem,1.3rem+1.4vw,2.3rem);">Kein unüberlegter Sprung. Ein organisierter Berufseinstieg.</h2>
+          <p>Die meisten Gap-Year-Entscheidungen scheitern nicht am Willen — sondern an der Sorge der Eltern. Deshalb gibt's einen echten Ansprechpartner und ein optionales Status-Update nach der Ankunft.</p>
+          <div class="parent-quote">
+            <p>„Ich war skeptisch, bis ich gesehen habe, wie durchorganisiert das war — sogar eine Nachricht am ersten Abend, dass alles gut ist.“</p>
+            <cite>— Mutter einer Teilnehmerin, Málaga</cite>
+          </div>
+        </div>
+        <div class="reveal">
+          <details class="faq" open>
+            <summary>Ist mein Kind vor Ort wirklich sicher untergebracht?</summary>
+            <div class="faq-body">Jedes Zimmer stammt aus unserem geprüften Vermieter-Netzwerk, wo möglich mit Video-Erstbesichtigung vor Vertragsabschluss.</div>
+          </details>
+          <details class="faq">
+            <summary>Wer ist im Notfall erreichbar?</summary>
+            <div class="faq-body">Eine WhatsApp-Hotline ist 90 Tage aktiv — reguläre Bürozeiten plus definierte Notfallerreichbarkeit.</div>
+          </details>
+          <details class="faq">
+            <summary>Bekommen wir mit, ob alles gut angekommen ist?</summary>
+            <div class="faq-body">Ja, optional: Auf Wunsch schicken wir einer festgelegten Kontaktperson einen kurzen Status nach der Ankunft.</div>
+          </details>
+          <details class="faq">
+            <summary>Was, wenn es doch nicht klappt?</summary>
+            <div class="faq-body">Aktives Erwartungsmanagement schon im Erstgespräch. Sollte es nicht passen, unterstützen wir bei Rückholoptionen.</div>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABLAUF -->
+  <section id="ablauf">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Ablauf</p>
+        <h2>Sieben Gates von der Bewerbung bis zur Ankunft.</h2>
+      </div>
+      <div class="itinerary reveal">
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">01</div><div class="leg-line"></div></div><div><h4>Erstgespräch</h4><p>15–20 Minuten per Video: Motivations-Check, Erwartungsabgleich, Pfad A oder B.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">02</div><div class="leg-line"></div></div><div><h4>Matching</h4><p>Abgleich mit offenen Stellen bei unseren Arbeitgeber-Partnern.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">03</div><div class="leg-line"></div></div><div><h4>Interview-Prep</h4><p>Wir bereiten dich inhaltlich vor: typische Fragen, Unternehmenskultur.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">04</div><div class="leg-line"></div></div><div><h4>Jobzusage</h4><p>Vertragsunterzeichnung direkt mit dem Arbeitgeber vor Ort.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">05</div><div class="leg-line"></div></div><div><h4>Pre-Departure</h4><p>Bei Pfad B: Wohnraum-Matching, Behördentermin-Vorbereitung, Checkliste.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">06</div><div class="leg-line"></div></div><div><h4>Ankunft &amp; Onboarding</h4><p>Abholung, Einweisung, Behördengänge, Übergabe an die Community.</p></div></div>
+        <div class="leg"><div class="leg-rail"><div class="leg-dot">07</div></div><div><h4>90 Tage Nachbetreuung</h4><p>Regelmäßige Check-ins &amp; Notfall-Hotline — schützt auch die Garantie unserer Arbeitgeber.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="preise">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Preise für Bewerber</p>
+        <h2>Die Jobvermittlung ist <span class="mark lime">immer kostenlos.</span></h2>
+        <p>Das VIP-Paket ist eine eigenständige, freiwillige Zusatzleistung für die Umzugsorganisation.</p>
+      </div>
+      <div class="pricing">
+        <div class="price-card pop reveal">
+          <span class="path-tag mono">Pfad A</span>
+          <h3>Do-it-yourself</h3>
+          <div class="price-amount">0&nbsp;€</div>
+          <div class="price-sub">Dauerhaft kostenlos, keine versteckten Kosten</div>
+          <hr class="dash" />
+          <ul class="path-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Zugang zu geprüften Jobangeboten</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>CV-Check &amp; Interview-Prep</li>
+          </ul>
+          <a class="btn btn-ghost" href="#kontakt">Kostenlos starten</a>
+        </div>
+        <div class="price-card pop highlight reveal">
+          <span class="path-tag mono">Pfad B</span>
+          <h3>VIP Sorglos-Paket</h3>
+          <div class="price-amount">1.200&nbsp;€ <small>oder 3 × 400 €</small></div>
+          <div class="price-sub">Ratenmodell: automatisch aus den ersten drei Gehältern</div>
+          <hr class="dash" />
+          <ul class="path-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Behörden, Wohnung, Flughafen-Empfang</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="var(--ink)" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>90 Tage Notfall-Hotline &amp; Community</li>
+          </ul>
+          <a class="btn btn-pink" href="#kontakt">VIP-Paket sichern</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="stimmen">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Stimmen</p>
+        <h2>Angekommen, nicht nur ausgewandert.</h2>
+      </div>
+      <div class="testi-grid">
+        <div class="testi pop rot-l reveal">
+          <p>„Ich bin 20, wohne jetzt in Málaga und verdiene mehr als zuhause. Der erste Monat war stressfrei, weil Wohnung und NIE-Nummer schon standen.“</p>
+          <footer><span class="testi-avatar">L.</span>Lena, Customer Support · Málaga</footer>
+        </div>
+        <div class="testi pop reveal">
+          <p>„Meine Mutter hatte Panik, als ich ihr gesagt habe, dass ich für einen Job nach Zypern ziehe — bis sie gesehen hat, wie das Erstgespräch wirklich abläuft.“</p>
+          <footer><span class="testi-avatar">J.</span>Jonas, Sales · Limassol</footer>
+        </div>
+        <div class="testi pop rot-r reveal">
+          <p>„Das VIP-Paket war jeden Cent wert — Wohnung stand, NIE-Nummer war beantragt, und am Flughafen hat mich direkt jemand abgeholt.“</p>
+          <footer><span class="testi-avatar">P.</span>Paul, Tech Support · Lissabon</footer>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="kontakt">
+    <div class="wrap">
+      <div class="contact-layout">
+        <div class="reveal contact-side">
+          <p class="eyebrow">Kontakt</p>
+          <h2 style="font-size:clamp(1.7rem,1.3rem+1.4vw,2.3rem);">Buche dein Erstgespräch.</h2>
+          <p>15–20 Minuten per Video-Call. Wir sprechen über Sprachlevel, Wunschland und Zeitrahmen — unverbindlich und kostenlos.</p>
+          <div class="codes-strip">
+            <span class="sticker rot-l">AGP Málaga</span>
+            <span class="sticker rot-r" style="background:var(--pink); color:#fff;">LIS Lissabon</span>
+            <span class="sticker rot-l" style="background:var(--blue); color:#fff;">LCA Limassol</span>
+            <span class="sticker rot-r" style="background:var(--yellow);">MLA Malta</span>
+          </div>
+        </div>
+        <div class="contact-card pop reveal">
+          <form id="contact-form">
+            <div class="form-row">
+              <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" type="text" required autocomplete="name" /></div>
+              <div class="field"><label for="f-email">E-Mail</label><input id="f-email" name="email" type="email" required autocomplete="email" /></div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="f-level">Sprachlevel Deutsch</label>
+                <select id="f-level" name="level" required>
+                  <option value="">Bitte wählen</option>
+                  <option>Muttersprache</option><option>C1</option><option>C2</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="f-country">Wunschland</label>
+                <select id="f-country" name="country" required>
+                  <option value="">Bitte wählen</option>
+                  <option>Spanien (AGP)</option><option>Portugal (LIS)</option><option>Zypern (LCA)</option><option>Malta (MLA)</option><option>Egal / offen</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field" style="grid-column:1 / -1;">
+                <label for="f-time">Zeitrahmen</label>
+                <select id="f-time" name="time" required>
+                  <option value="">Bitte wählen</option>
+                  <option>So schnell wie möglich</option><option>In 1–3 Monaten</option><option>In 3–6 Monaten</option><option>Noch unklar</option>
+                </select>
+              </div>
+            </div>
+            <button class="btn btn-pink" type="submit" style="width:100%;">Erstgespräch anfragen</button>
+            <p class="contact-legal">Die Jobvermittlung ist für dich als Bewerber:in stets kostenlos. Mit dem Absenden akzeptierst du unsere Datenschutzhinweise. Wir sind keine Steuer-, Rechts- oder Finanzberatung.</p>
+          </form>
+          <div id="form-success">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+            Anfrage erhalten — wir melden uns innerhalb von 24 Stunden bei dir.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="logo-text" style="color:var(--yellow);">ANKUNFT</div>
+        <p style="color:rgba(255,247,228,.7); font-size:0.9rem; margin-top:10px;">Hybrid-Agentur für Gap-Year-Jobvermittlung &amp; Premium-Relocation. Kostenlose Jobvermittlung, bezahlt vom Arbeitgeber. Das VIP-Paket ist eine freiwillige, eigenständige Zusatzleistung.</p>
+      </div>
+      <div><h5>Angebot</h5><ul><li><a href="#usp">Warum wir</a></li><li><a href="#eltern">Für Eltern</a></li><li><a href="#preise">Preise</a></li><li><a href="unternehmen.html">Für Unternehmen →</a></li></ul></div>
+      <div><h5>Ziel-Hubs</h5><ul><li><a href="#ziellaender">Spanien · AGP</a></li><li><a href="#ziellaender">Portugal · LIS</a></li><li><a href="#ziellaender">Zypern · LCA</a></li><li><a href="#ziellaender">Malta · MLA</a></li></ul></div>
+      <div><h5>Rechtliches</h5><ul><li><a href="#">Impressum</a></li><li><a href="#">Datenschutz</a></li><li><a href="#">AGB</a></li></ul></div>
+    </div>
+  </div>
+  <div class="wrap">
+    <p class="footer-legal">Hinweis: Wir erbringen keine Steuer-, Rechts- oder Finanzberatung, sondern ausschließlich organisatorische Unterstützung und die Vermittlung von Kontakten zu lizenzierten Dienstleister:innen vor Ort. Provisionen für die Vermittlung werden ausschließlich vom Arbeitgeber getragen (§ 296 SGB III).</p>
+    <div class="footer-bottom">
+      <span>&copy; <span id="year"></span> Ankunft Talent &amp; Relocation</span>
+      <span class="mono">AGP · LIS · LCA · MLA</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var navToggle = document.getElementById('navToggle');
+  var mobileMenu = document.getElementById('mobileMenu');
+  navToggle.addEventListener('click', function(){
+    var open = mobileMenu.style.display === 'block';
+    mobileMenu.style.display = open ? 'none' : 'block';
+    navToggle.setAttribute('aria-expanded', String(!open));
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){ mobileMenu.style.display = 'none'; navToggle.setAttribute('aria-expanded','false'); });
+  });
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.14 });
+    document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('in'); });
+  }
+
+  function countUp(el){
+    var target = parseInt(el.getAttribute('data-count'), 10);
+    if (isNaN(target)) return;
+    var suffix = el.textContent.indexOf('€') > -1 ? ' €' : '';
+    if (reduceMotion) { el.textContent = target + suffix; return; }
+    var start = null, duration = 900;
+    function step(ts){
+      if (!start) start = ts;
+      var progress = Math.min((ts - start) / duration, 1);
+      el.textContent = Math.round(progress * target) + suffix;
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  var statEls = document.querySelectorAll('.stat b[data-count]');
+  if ('IntersectionObserver' in window) {
+    var statIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){ if (e.isIntersecting) { countUp(e.target); statIo.unobserve(e.target); } });
+    }, { threshold: 0.6 });
+    statEls.forEach(function(el){ statIo.observe(el); });
+  } else { statEls.forEach(countUp); }
+
+  var form = document.getElementById('contact-form');
+  var success = document.getElementById('form-success');
+  form.addEventListener('submit', function(ev){
+    ev.preventDefault();
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+    form.classList.add('hide');
+    success.classList.add('show');
+  });
+</script>
+</body>
+</html>
